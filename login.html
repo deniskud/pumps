@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ua" class="login-page">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Водоканал Бородянка. Система свердловин</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+	<script src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+
+	<div class="lf-wrap">
+		<div>
+			<form class="login-form">
+				<label>Ваш логін</label>
+				<input type="text" placeholder="Логін">
+				<label>Ваш пароль</label>
+				<input type="text" placeholder="Пароль">
+				<button type="submit">Вхід</button>
+				<div class="login-form-error-message">Дані вказано невірно!</div>
+				<!--
+				to show error message apply next code
+
+				$('.login-form-error-message').stop().slideDown();
+				setTimeout(function() {
+					$('.login-form-error-message').stop().slideUp();
+				}, 3000);
+
+				-->
+			</form>
+		</div>
+	</div>
+</body>
+</html>
