@@ -5,6 +5,9 @@
 
 $(document).ready(function () {
 
+    moment.locale('uk');
+    moment().format('HHmm');
+
     // ----- necessary variables
     const _body = $('body'), chartInfoOptions = {
         responsive: true,
@@ -12,6 +15,16 @@ $(document).ready(function () {
         scales: {
             xAxes: [{
                 type: 'time',
+                distribution: 'series',
+                time: {
+                    isoWeekday: true,
+                    minUnit: 'minute',
+                    tooltipFormat: 'DD MMM YYYY HH:mm',
+                    displayFormats: {
+                        minute: 'HH:mm',
+                        hour: 'DD-MM HH:mm'
+                    }
+                },
                 ticks: {
                     fontColor: "#a9afb1"
                 }
@@ -29,6 +42,16 @@ $(document).ready(function () {
         scales: {
             xAxes: [{
                 type: 'time',
+                distribution: 'series',
+                time: {
+                    isoWeekday: true,
+                    minUnit: 'minute',
+                    tooltipFormat: 'DD MMM YYYY HH:mm',
+                    displayFormats: {
+                        minute: 'HH:mm',
+                        hour: 'DD-MM HH:mm'
+                    }
+                },
                 ticks: {
                     fontColor: "#a9afb1"
                 }
@@ -300,7 +323,7 @@ $(document).ready(function () {
 
         // ----- init single chart for engine work hours
         infoChartEngine = new Chart($('.info-chart-engine'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: wellData.chartDates.chartInfoDates,
                 datasets: [{
@@ -315,6 +338,9 @@ $(document).ready(function () {
             },
             options: chartInfoOptions
         });
+        infoChartEngine.options.scales.xAxes[0].offset = true;
+        infoChartEngine.options.scales.yAxes[0].ticks.max = 24;
+        infoChartEngine.update();
 
         // ----- set data for comparison charts
         $('.well.is-compare').each(function () {
@@ -351,7 +377,7 @@ $(document).ready(function () {
                 borderColor: $(this).find('.well-head').css('color'),
                 pointHitRadius: 10,
                 borderWidth: 1,
-                backgroundColor: 'transparent',
+                backgroundColor: $(this).find('.well-head').attr('data-bg'),
                 data: wellData.wells[$(this).attr('data-id')].chartEngineC
             });
 
@@ -389,13 +415,16 @@ $(document).ready(function () {
 
         // ----- init compare chart for engine work hours
         compareChartEngine = new Chart($('.compare-chart-engine'), {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: wellData.chartDates.chartCompareDates,
                 datasets: compareChartEngineData
             },
             options: chartCompareOptions
         });
+        compareChartEngine.options.scales.xAxes[0].offset = true;
+        compareChartEngine.options.scales.yAxes[0].ticks.max = 24;
+        compareChartEngine.update();
 
         graphsInfo();
 
