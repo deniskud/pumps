@@ -118,16 +118,17 @@ olddat=dat=oldday=day=inc=0;
 
 
 		times.push(olddat.tm);
-		n1[inc] = ((start.l1-olddat.l1)*100).toFixed(2);
-		n2[inc] = ((start.p1-olddat.p1)*100).toFixed(2);
-		if (!n1[inc] || !n2[inc]) n3[inc]=0; else n3[inc] = (n2[inc]/n1[inc]).toFixed(2);	
+		n1[inc] = (Math.round((start.l1-olddat.l1)*100)/100);
+		n2[inc] = (Math.round((start.p1-olddat.p1)*100)/100);
+		if (!n1[inc] || !n2[inc]) n3[inc]=0; else n3[inc] = n2[inc]/n1[inc];	
 		inc++;
 		} else continue;	
+
 	} else {	
 
 	times.push(yy.tm);
-	n1[i-1] = ((xx.l1-yy.l1)*100).toFixed(2);
-	n2[i-1] = ((xx.p1-yy.p1)*100).toFixed(2);
+	n1[i-1] = (Math.round((xx.l1-yy.l1)*100)/100);
+	n2[i-1] = (Math.round((xx.p1-yy.p1)*100)/100);
 
 	xx = yy;
 
@@ -736,7 +737,6 @@ if (datef) {
             if(dataPeriod === 5) {
                 if(new Date().getDate() === 1) {
                     chartRequest.push(+ new Date());
-
                 }
                 else {
                     chartRequest.push(+ new Date(Date.now() - ((new Date().getDate() - 1)*24*60*60*1000)));
@@ -951,9 +951,9 @@ if (datef) {
     function computeTotal(el) {
         let total = 0;
         for(let i = 0; i < el.length; i++) {
-	  if (el[i])  total += el[i]*1;
+	  if (el[i])  total += el[i];
         }
-        return total//.toFixed(1);
+        return total.toFixed(1);
 //	    return 0;
     }
 
