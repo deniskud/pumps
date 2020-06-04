@@ -352,7 +352,7 @@ sub {
     font-size: 14px;
     font-weight: 700;
 }
-.graphs, .comparison {
+.map, .graphs, .comparison {
     display: none;
 }
 .head-select-info .well.is-info .well-head h4 {
@@ -998,6 +998,121 @@ sub {
 }
 .listview-info .graphs .total-period-info, .listview-compare .comparison .total-period-info {
     min-height: unset;
+}
+.tables .content-box + .content-box {
+    margin: 30px 0 0 0;
+}
+.table-wrap {
+    overflow: hidden;
+    overflow-x: auto;
+    margin: 15px 0 0 0;
+}
+.table {
+    width: 100%;
+    text-align: center;
+    color: #212527;
+}
+.table thead th {
+    background: #212527;
+    color: #fff;
+    padding: 10px 8px 11px 8px;
+    vertical-align: middle;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.table thead tr + tr th {
+    padding-top: 13px;
+    box-shadow: inset 3px 3px 0 0 #fff;
+}
+.table thead th + th {
+    padding-left: 11px;
+    box-shadow: inset 3px 0 0 0 #fff;
+}
+.table thead tr th:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.table thead tr th:last-of-type {
+    border-radius: 0 4px 4px 0;
+}
+.table thead tr + tr th:first-of-type {
+    border-radius: 0;
+}
+.table tbody td {
+    padding: 10px 8px 11px 8px;
+    font-weight: 500;
+    position: relative;
+}
+.table tr:nth-of-type(even) td {
+    background: #eceff1;
+}
+.table tr:nth-of-type(even) td:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+.table tr:nth-of-type(even) td:last-of-type {
+    border-radius: 0 4px 4px 0;
+}
+.table td.ef {
+    color: #50a7e4;
+}
+.table td.ef.ef-low {
+    color: #f32e1a;
+}
+.table td.ef.ef-high {
+    color: #00d424;
+}
+.table td.ef.ef-no {
+    color: #212527;
+}
+.table tbody td:after {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    background: rgba(0, 107, 183, 0.2);
+}
+.table tbody td + td:after {
+    left: 3px;
+}
+.table tbody td.highlighted:after {
+    opacity: 1;
+    visibility: visible;
+}
+.table tbody td.highlighted {
+    font-weight: 700;
+}
+#table-day th {
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+}
+#table-day th:hover {
+    color: #2fb5f5;
+}
+#table-day th.asc, #table-day th.desc {
+    padding-right: 30px;
+}
+#table-day th.asc:after, #table-day th.desc:after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    border: 6px solid transparent;
+}
+#table-day th.asc:after {
+    border-top: 5px solid #fff;
+    margin: -2px 0 0 0;
+}
+#table-day th.desc:after {
+    border-bottom: 5px solid #fff;
+    margin: -9px 0 0 0;
 }
 
 /*-------------------responsive------------------*/

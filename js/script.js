@@ -80,6 +80,26 @@ $(document).ready(function () {
         },
         wells/*this is information for each well*/: {
             1/*this is the number of well - this numbers will not change*/: {
+                day: { // this is table data for last day
+                    water: 12,
+                    energy: 11,
+                    efficiency: 0.94
+                },
+                week: { // this is table data for last week
+                    water: 114,
+                    energy: 256,
+                    efficiency: 1.33
+                },
+                month: { // this is table data for last month
+                    water: 2145,
+                    energy: 2365,
+                    efficiency: 1.45
+                },
+                year: { // this is table data for last year
+                    water: 12546,
+                    energy: 15423,
+                    efficiency: 1.5
+                },
                 totalWater: '25468', // this is total water mining
                 totalEnergy: '145896', // this is total energy expense
                 totalEfficiency: ['1.858', '1'], // this is total(mean) energy expense; 1 element - expense for 1㎥, 2 element - efficiency - number from 1 to 7 (1 - best efficiency)
@@ -94,6 +114,26 @@ $(document).ready(function () {
                 chartEngineC: [18.618, 2.956, 12.487, 8.236, 14.584, 1.824] // this is engine work time for selected period in comparison mode
             },
             2: {
+                day: {
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: {
+                    water: 118,
+                    energy: 286,
+                    efficiency: 1.83
+                },
+                month: {
+                    water: 3254,
+                    energy: 4875,
+                    efficiency: 1.05
+                },
+                year: {
+                    water: 25463,
+                    energy: 12354,
+                    efficiency: 0.53
+                },
                 totalWater: '21468',
                 totalEnergy: '140896',
                 totalEfficiency: ['1.558', '2'],
@@ -108,6 +148,26 @@ $(document).ready(function () {
                 chartEngineC: [14.618, 12.956, 15.487, 3.236, 4.584, 21.824]
             },
             3: {
+                day: {
+                    water: 25,
+                    energy: 23,
+                    efficiency: 1.41
+                },
+                week: {
+                    water: 254,
+                    energy: 145,
+                    efficiency: 1.72
+                },
+                month: {
+                    water: 1254,
+                    energy: 4875,
+                    efficiency: 3.21
+                },
+                year: {
+                    water: 15634,
+                    energy: 21456,
+                    efficiency: 0.74
+                },
                 totalWater: '2468',
                 totalEnergy: '14896',
                 totalEfficiency: ['1.358', '3'],
@@ -122,6 +182,26 @@ $(document).ready(function () {
                 chartEngineC: [1.618, 20.956, 13.487, 13.236, 3.584, 17.824]
             },
             4: {
+                day: {
+                    water: 36,
+                    energy: 45,
+                    efficiency: 1.28
+                },
+                week: {
+                    water: 458,
+                    energy: 541,
+                    efficiency: 1.02
+                },
+                month: {
+                    water: 3621,
+                    energy: 3587,
+                    efficiency: 1.00
+                },
+                year: {
+                    water: 26984,
+                    energy: 28716,
+                    efficiency: 1.55
+                },
                 totalWater: '12468',
                 totalEnergy: '114896',
                 totalEfficiency: ['1.158', '4'],
@@ -136,6 +216,26 @@ $(document).ready(function () {
                 chartEngineC: [13.618, 11.956, 1.487, 8.236, 15.584, 12.824]
             },
             5: {
+                day: {
+                    water: 15,
+                    energy: 9,
+                    efficiency: 1.63
+                },
+                week: {
+                    water: 142,
+                    energy: 265,
+                    efficiency: 0.62
+                },
+                month: {
+                    water: 2145,
+                    energy: 2953,
+                    efficiency: 2.01
+                },
+                year: {
+                    water: 23654,
+                    energy: 12985,
+                    efficiency: 1.96
+                },
                 totalWater: '29468',
                 totalEnergy: '200896',
                 totalEfficiency: ['0.958', '5'],
@@ -150,6 +250,26 @@ $(document).ready(function () {
                 chartEngineC: [2.618, 7.956, 17.487, 18.236, 22.584, 4.824]
             },
             6: {
+                day: {
+                    water: 14,
+                    energy: 20,
+                    efficiency: 0.74
+                },
+                week: {
+                    water: 384,
+                    energy: 249,
+                    efficiency: 1.08
+                },
+                month: {
+                    water: 1782,
+                    energy: 2056,
+                    efficiency: 0.56
+                },
+                year: {
+                    water: 26547,
+                    energy: 30014,
+                    efficiency: 1.34
+                },
                 totalWater: '468',
                 totalEnergy: '896',
                 totalEfficiency: ['0.758', '6'],
@@ -164,6 +284,26 @@ $(document).ready(function () {
                 chartEngineC: [12.618, 14.956, 16.487, 6.236, 14.584, 23.824]
             },
             7: {
+                day: {
+                    water: 32,
+                    energy: 14,
+                    efficiency: 1.76
+                },
+                week: {
+                    water: 284,
+                    energy: 341,
+                    efficiency: 0.83
+                },
+                month: {
+                    water: 1258,
+                    energy: 1005,
+                    efficiency: 1.65
+                },
+                year: {
+                    water: 19453,
+                    energy: 26931,
+                    efficiency: 1.13
+                },
                 totalWater: '32468',
                 totalEnergy: '320896',
                 totalEfficiency: ['0.558', '7'],
@@ -178,6 +318,26 @@ $(document).ready(function () {
                 chartEngineC: [5.618, 7.956, 21.487, 17.236, 9.584, 3.824]
             },
             8: {
+                day: {
+                    water: 3,
+                    energy: 4,
+                    efficiency: 1.26
+                },
+                week: {
+                    water: 48,
+                    energy: 54,
+                    efficiency: 1.23
+                },
+                month: {
+                    water: 265,
+                    energy: 387,
+                    efficiency: 0.95
+                },
+                year: {
+                    water: 1542,
+                    energy: 2698,
+                    efficiency: 0.83
+                },
                 totalWater: '3268',
                 totalEnergy: '32896',
                 totalEfficiency: ['0.358', '7'],
@@ -192,6 +352,26 @@ $(document).ready(function () {
                 chartEngineC: [21.618, 4.956, 17.487, 14.236, 19.584, 6.824]
             },
             9: {
+                day: {
+                    water: 26,
+                    energy: 34,
+                    efficiency: 1.96
+                },
+                week: {
+                    water: 182,
+                    energy: 200,
+                    efficiency: 1.63
+                },
+                month: {
+                    water: 3652,
+                    energy: 2996,
+                    efficiency: 0.71
+                },
+                year: {
+                    water: 20011,
+                    energy: 24631,
+                    efficiency: 1.63
+                },
                 totalWater: '13268',
                 totalEnergy: '132896',
                 totalEfficiency: ['0.358', '7'],
@@ -206,6 +386,26 @@ $(document).ready(function () {
                 chartEngineC: [16.618, 17.956, 11.487, 5.236, 8.584, 9.824]
             },
             10: {
+                day: {
+                    water: 18,
+                    energy: 25,
+                    efficiency: 1.06
+                },
+                week: {
+                    water: 256,
+                    energy: 512,
+                    efficiency: 0.50
+                },
+                month: {
+                    water: 1415,
+                    energy: 2413,
+                    efficiency: 0.41
+                },
+                year: {
+                    water: 17563,
+                    energy: 19542,
+                    efficiency: 1.38
+                },
                 totalWater: '33268',
                 totalEnergy: '332896',
                 totalEfficiency: ['0.358', '7'],
@@ -222,6 +422,26 @@ $(document).ready(function () {
             11: false,
             12: false,
             13: {
+                day: {
+                    water: 21,
+                    energy: 36,
+                    efficiency: 0.76
+                },
+                week: {
+                    water: 125,
+                    energy: 174,
+                    efficiency: 1.44
+                },
+                month: {
+                    water: 3652,
+                    energy: 4785,
+                    efficiency: 2.41
+                },
+                year: {
+                    water: 24736,
+                    energy: 30100,
+                    efficiency: 1.58
+                },
                 totalWater: '13268',
                 totalEnergy: '142896',
                 totalEfficiency: ['0.358', '7'],
@@ -544,15 +764,58 @@ $(document).ready(function () {
     drawInfo();
     drawGraphs();
 
+    // ----- draw tables
+    for(let n in wellData.wells) {
+        if(wellData.wells[n] !== false) {
+            $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
+            $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
+        }
+    }
+
+    // ----- tables highlight cells
+    $(".table").on('mouseenter', 'td', function(){
+        $(this).closest('.table').find('tbody tr td:nth-of-type(' + ($(this).index() + 1) + ')').addClass('highlighted');
+        $(this).siblings('td').addClass('highlighted');
+    }).on('mouseleave', 'td', function(){
+        $('.table').find('tbody tr td').removeClass('highlighted');
+    });
+
+    // ----- day table add class for sorting
+    $('#table-day th').click(function () {
+        if($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+        }
+        else if($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+        }
+        else {
+            $('#table-day th').removeClass('asc desc');
+            $(this).addClass('asc');
+        }
+    });
+
+    // ----- day table sorting
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+            v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+    document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
+        const table = $(th).closest('table').find('tbody')[0];
+        Array.from(table.querySelectorAll('tr:nth-child(n+1)'))
+            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+            .forEach(tr => table.appendChild(tr));
+    })));
+
     // ----- hide page preloader
     $('#page-loader').stop().fadeOut();
 
     // ----- toggle views
     $('.head-select ul li').click(function () {
         $('.head-select ul li').removeClass('active');
-        _body.removeClass('head-select-map head-select-info head-select-compare').addClass($(this).attr('class'));
+        _body.removeClass('head-select-tables head-select-map head-select-info head-select-compare').addClass($(this).attr('class'));
         $(this).addClass('active');
-        $('.map, .graphs, .comparison').hide();
+        $('.tables, .map, .graphs, .comparison').hide();
+        $(this).hasClass('head-select-tables') && $('.tables').show();
         $(this).hasClass('head-select-map') && $('.map').show();
         $(this).hasClass('head-select-info') && $('.graphs').show();
         $(this).hasClass('head-select-compare') && $('.comparison').show();
@@ -622,6 +885,9 @@ $(document).ready(function () {
         if($(this).closest('.head-select-map').length) {
             $(this).closest('.well').toggleClass('tooltip-shown');
             $('.map-point[data-id="' + $(this).closest('.well').attr('data-id') + '"]').toggleClass('tooltip-shown');
+        }
+        if($(this).closest('.head-select-tables').length) {
+            $(this).siblings('.well-btn').click();
         }
 
     });
