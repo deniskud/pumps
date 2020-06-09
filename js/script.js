@@ -67,7 +67,7 @@ $(document).ready(function () {
             mode: 'index'
         }
     };
-    let infoChartWater, infoChartEnergy, infoChartCompare, infoChartEngine, compareChartWater, compareChartEnergy, compareChartCompare, compareChartEngine, compareChartWaterData = [], compareChartEnergyData = [], compareChartCompareData = [], compareChartEngineData = [], wellData, chartRequest = [];
+    let infoChartWater, infoChartEnergy, infoChartCompare, infoChartEngine, compareChartWater, compareChartEnergy, compareChartCompare, compareChartEngine, compareChartWaterData = [], compareChartEnergyData = [], compareChartCompareData = [], compareChartEngineData = [], wellData, chartRequest = [], pageTitle = document.title;
 
     // ----- remove chart legend
     Chart.defaults.global.legend.display = false;
@@ -102,7 +102,7 @@ $(document).ready(function () {
                 },
                 totalWater: '25468', // this is total water mining
                 totalEnergy: '145896', // this is total energy expense
-                totalEfficiency: ['1.858', '1'], // this is total(mean) energy expense; 1 element - expense for 1㎥, 2 element - efficiency - number from 1 to 7 (1 - best efficiency)
+                totalEfficiency: '1.858', // this is total(mean) energy expense for 1㎥
                 lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
                 chartWaterI: [47.618, 24.956, 69.487, 28.236, 32.584, 2.824], // this is water mining for selected period in information mode
                 chartEnergyI: [18.618, 9.956, 25.487, 8.236, 14.584, 0.824], // this is energy expense for selected period in information mode
@@ -136,7 +136,7 @@ $(document).ready(function () {
                 },
                 totalWater: '21468',
                 totalEnergy: '140896',
-                totalEfficiency: ['1.558', '2'],
+                totalEfficiency: '1.558',
                 lockStatus: "1",
                 chartWaterI: [33.618, 22.956, 49.487, 55.236, 12.584, 32.824],
                 chartEnergyI: [28.618, 19.956, 5.487, 18.236, 24.584, 15.824],
@@ -170,7 +170,7 @@ $(document).ready(function () {
                 },
                 totalWater: '2468',
                 totalEnergy: '14896',
-                totalEfficiency: ['1.358', '3'],
+                totalEfficiency: '1.358',
                 lockStatus: "0",
                 chartWaterI: [23.618, 45.956, 12.487, 15.236, 29.584, 45.824],
                 chartEnergyI: [15.618, 23.956, 14.487, 22.236, 42.584, 21.824],
@@ -204,7 +204,7 @@ $(document).ready(function () {
                 },
                 totalWater: '12468',
                 totalEnergy: '114896',
-                totalEfficiency: ['1.158', '4'],
+                totalEfficiency: '1.158',
                 lockStatus: "0",
                 chartWaterI: [31.618, 21.956, 9.487, 15.236, 22.584, 42.824],
                 chartEnergyI: [35.618, 1.956, 2.487, 18.236, 35.584, 1.824],
@@ -238,7 +238,7 @@ $(document).ready(function () {
                 },
                 totalWater: '29468',
                 totalEnergy: '200896',
-                totalEfficiency: ['0.958', '5'],
+                totalEfficiency: '0.958',
                 lockStatus: "0",
                 chartWaterI: [43.618, 34.956, 59.487, 19.236, 41.584, 12.824],
                 chartEnergyI: [26.618, 21.956, 41.487, 38.236, 52.584, 13.824],
@@ -272,7 +272,7 @@ $(document).ready(function () {
                 },
                 totalWater: '468',
                 totalEnergy: '896',
-                totalEfficiency: ['0.758', '6'],
+                totalEfficiency: '0.758',
                 lockStatus: "0",
                 chartWaterI: [18.618, 54.956, 37.487, 41.236, 29.584, 46.824],
                 chartEnergyI: [17.618, 42.956, 37.487, 14.236, 31.584, 24.824],
@@ -306,7 +306,7 @@ $(document).ready(function () {
                 },
                 totalWater: '32468',
                 totalEnergy: '320896',
-                totalEfficiency: ['0.558', '7'],
+                totalEfficiency: '0.558',
                 lockStatus: "0",
                 chartWaterI: [25.618, 1.956, 34.487, 29.236, 57.584, 35.824],
                 chartEnergyI: [12.618, 2.956, 43.487, 21.236, 40.584, 30.824],
@@ -340,7 +340,7 @@ $(document).ready(function () {
                 },
                 totalWater: '3268',
                 totalEnergy: '32896',
-                totalEfficiency: ['0.358', '7'],
+                totalEfficiency: '0.358',
                 lockStatus: "0",
                 chartWaterI: [57.618, 13.956, 11.487, 40.236, 50.584, 30.824],
                 chartEnergyI: [29.618, 22.956, 15.487, 34.236, 19.584, 39.824],
@@ -374,7 +374,7 @@ $(document).ready(function () {
                 },
                 totalWater: '13268',
                 totalEnergy: '132896',
-                totalEfficiency: ['0.358', '7'],
+                totalEfficiency: '0.358',
                 lockStatus: "0",
                 chartWaterI: [27.618, 23.956, 14.487, 51.236, 36.584, 27.824],
                 chartEnergyI: [31.618, 40.956, 24.487, 20.236, 41.584, 38.824],
@@ -408,7 +408,7 @@ $(document).ready(function () {
                 },
                 totalWater: '33268',
                 totalEnergy: '332896',
-                totalEfficiency: ['0.358', '7'],
+                totalEfficiency: '0.358',
                 lockStatus: "0",
                 chartWaterI: [2.618, 3.956, 4.487, 1.236, 6.584, 7.824],
                 chartEnergyI: [1.618, 2.956, 4.487, 2.236, 7.584, 9.824],
@@ -444,7 +444,7 @@ $(document).ready(function () {
                 },
                 totalWater: '13268',
                 totalEnergy: '142896',
-                totalEfficiency: ['0.358', '7'],
+                totalEfficiency: '0.358',
                 lockStatus: "0",
                 chartWaterI: [7.618, 41.956, 34.487, 37.236, 42.584, 25.824],
                 chartEnergyI: [12.618, 45.956, 39.487, 41.236, 46.584, 31.824],
@@ -466,7 +466,8 @@ $(document).ready(function () {
                 $('.well[data-id="' + n + '"] .well-info, .map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>—//— <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>—//— <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart"></i>—//— <span>кВт за м<sup>3</sup></span></li><li><i class="well-lock"></i>—//—</li>');
             }
             else {
-                $('.well[data-id="' + n + '"] .well-info, .map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].totalWater + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].totalEnergy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart" data-efficiency="' + wellData.wells[n].totalEfficiency[1] + '"></i>' + wellData.wells[n].totalEfficiency[0] + ' <span>кВт за м<sup>3</sup></span></li><li><i class="well-lock" data-lock="' + wellData.wells[n].lockStatus + '"></i><strong class="well-lock-status">Зачинено</strong><strong class="well-lock-status">Відчинено</strong></li>');
+                $('.well[data-id="' + n + '"] .well-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].totalWater + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].totalEnergy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart ef' + (wellData.wells[n].totalEfficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].totalEfficiency > 1.4 ? ' ef-low' : '') + '"></i>' + wellData.wells[n].totalEfficiency + ' <span>кВт за м<sup>3</sup></span></li><li><i class="well-lock" data-lock="' + wellData.wells[n].lockStatus + '"></i><strong class="well-lock-status">Зачинено</strong><strong class="well-lock-status">Відчинено</strong></li>');
+                $('.map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].day.water + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].day.energy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + '"></i>' + wellData.wells[n].day.efficiency + ' <span>кВт за м<sup>3</sup></span></li>');
             }
         }
     }
@@ -767,8 +768,8 @@ $(document).ready(function () {
     // ----- draw tables
     for(let n in wellData.wells) {
         if(wellData.wells[n] !== false) {
-            $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
-            $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency < 1.45 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency > 1.55 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
+            $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
+            $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
         }
     }
 
@@ -1121,6 +1122,11 @@ $(document).ready(function () {
         $('.map-point[data-id="' + $(this).closest('.well').attr('data-id') + '"]').addClass('tooltip-visible');
     }, function () {
         $('.map-point[data-id="' + $(this).closest('.well').attr('data-id') + '"]').removeClass('tooltip-visible');
+    });
+
+    // ----- print info tables
+    $('.print-btn').click(function () {
+        window.print();
     });
 
     // ----- common data for all requests
