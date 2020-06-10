@@ -1104,15 +1104,15 @@ sub {
 }
 .map-point-number {
     position: absolute;
-    left: -2px;
-    top: -2px;
+    left: -5px;
+    top: -5px;
     border-radius: 50%;
     background: #2da4f7;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     font-weight: 500;
-    font-size: 12px;
-    line-height: 20px;
+    font-size: 16px;
+    line-height: 24px;
     color: #fff;
 }
 .map-point.disabled .map-point-number {
