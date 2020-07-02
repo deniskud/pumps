@@ -98,7 +98,7 @@ function xparse(id,prs) {
 		if (v_l1>0 || v_p1>0) {
 		dpump[geth(ltime)] = {v_l1,v_p1,l1,p1};
 //		dpump.push([geth(ltime),v_l1,v_p1);
-		console.log(">>",geth(ltime),v_l1,v_p1,l1,p1);
+//		console.log(">>",geth(ltime),v_l1,v_p1,l1,p1);
 		count++;
 		}
 	     	v_l1 = l1;
@@ -119,14 +119,14 @@ function save_data(id) {
 
 dpumps[id] = dpump; dpump={};
 //console.log(dpump);
-console.log(">>>>",count);
+console.log(">>>>",id,count);
 count=0;
 };
 
 starts = {
 	1:1586951000000,
 	2:1586951000000,
-	3:1586951000000,
+	3:1576951000000,
 	5:1586951000000,
 	10:1586951000000,
 	12:1586951000000
@@ -192,8 +192,7 @@ if (datef) {
 	for (i in json.data_list) if (json.data_list[i]) xparse(devid,json.data_list[i].data);
 	}
 	save_data(devid);
-	console.log(":>>>",devid);
-	console.log(json.data_list.length);
+	console.log(":>>>",devid,json.data_list.length);
 	break;
 
 	}
