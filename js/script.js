@@ -1,30 +1,42 @@
-/**
+/*
  * Created by No Fear on 15.05.2020.
  * E-mail: g0th1c097@gmail.com
  */
 
 
+
 xrange = 0;
- 
+nows = 1; 
+intr = 0;
+
 $(document).ready(function () {
 
-
-
-
-
+if (!document.cookie || !document.cookie.match(/Token/)) top.location='/login.html';
 const xws = new WebSocket('ws://dutch.lora-wan.net:8002/');
 
+const xxws = new WebSocket('ws://pumps.lora-wan.net:8080/');
+
 base = {   // Стартовые значения счетчиков (water, kw)
-	    1:[7070500,7200],
-	    2:[3139600,-1400],
-	    5:[13474700,171600]
+//        1:[7070500,7200],
+        1:[0,0],
+//	    2:[3139600,-1400],
+        2:[0,0],
+        3:[0,0],
+       5:[0,0],
+//        5:[13474700,171600],
+        10:[0,0],
+
+	12:[0,0]
 
 }
 
 pumps = {	// Lora devEui	для счетчиков
-	    1:"323033375D387201",
-	    2:"3230333770386801",
-	    5:"373130386A397003"
+        1:"323033375D387201",
+        2:"3230333770386801",
+	3:"323834345A396206",
+        5:"373130386A397003",
+	10:"3238343456396206",
+	12:"373130386D396D01"
 }
 
 
@@ -32,155 +44,352 @@ pumps = {	// Lora devEui	для счетчиков
 function init() {xws.send(JSON.stringify({login:'stas',password:'josperado',cmd:'auth_req'}));}
 function getId(a) {for (i in pumps) if (pumps[i]==a) return i; return 0;}
 
+xxws.onopen = function() {
+
+xxws.send(JSON.stringify({cmd:'start'}));
+
+//xxws.send(JSON.stringify({cmd:'getit',id:1}));
+}
+
+xxws.onmessage = function(e) {
+  try{
+    json = e.data;
+    
+    newData(JSON.parse(json));
+ //   console.log(json);
+    }
+     catch(err) {console.log(err);}
+}
+
 xws.onopen = function() {init();};
 xws.onmessage = function(e) {
   try{
-    json=JSON.parse(e.data);
-    getData(json);
+    json = e.data;
+//    console.log(e.data);
+    getData(JSON.parse(json));
     }
      catch(err) {console.log(err);}
 };
+
+
+
+function newData(data) {
+
+//xdat = JSON.parse(data);
+//console.log(data);
+id = data.id;
+//console.log(id);
+//    wellData.wells[xid].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
+//    wellData.wells[xid].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
+//    wellData.wells[xid].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
+
+    times = Array(); n1=Array(); n2 = Array(); n3 = Array(); n4 = Array(); n5 = Array(); nr = Array();
+j = 0;
+
+var end = parseInt(data.df);
+var start = parseInt(data.dt);
+
+//JSON.stringify(data);
+h = parseInt((start-end)/3600000);
+console.log("---------------- ",data.df,data.dt,h);
+
+//    for (i in data.data) {
+//console.log(">>>",i,data.data[i]);
+//   }
+
+/*
+for (i = 0;i<h;i++) {
+
+if (data.data[i]) xxx = parseInt(data.data[i][0]); else xxx = 0;
+times[i] = end+i*3600000;
+
+if (xxx) {
+
+	n1[i] = (parseInt(data.data[i][1])/10).toFixed(2);
+	n2[i] = (parseInt(data.data[i][2])/600).toFixed(2);
+	if (!n1[i] || !n2[i]) n3[i]=0; else n3[i] = (n2[i]/n1[i]).toFixed(2);
+
+} else {
+//console.log("ok"); else console.log("fuck");
+//console.log("-");
+	n1[i] = "5";
+	n2[i] = "5";
+	n3[i] = "0.0001";
+}
+
+}
+*/
+
+
+ww = 0;
+ee = 0;
+ef = 0;
+
+
+    flagd = false;
+    flagw = false;
+    for (i in data.data) {   
+	times[i] = parseInt(data.data[i][0]);  
+	n1[j] = (parseInt(data.data[i][1])/10).toFixed(2);
+	n2[j] = (parseInt(data.data[i][2])/600).toFixed(2);
+	n4[j] = (parseInt(data.data[i][3])/10).toFixed(2);
+	n5[j] = (parseInt(data.data[i][4])/600).toFixed(2);
+	if (!n1[j] || !n2[j]) n3[j]=0; else n3[j] = (n2[j]/n1[j]).toFixed(2);	
+
+	if (times[0]-times[i]>86400000) {if (!flagd) {flagd = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+
+	ef = (ee/ww).toFixed(2);
+
+	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
+
+	}}
+	if (times[0]-times[i]>86400000*7) {if (!flagw) {flagw = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+
+	ef = (ee/ww).toFixed(2);
+
+	 wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
+
+
+	}}
+ 
+//	console.log(">>",times[0]-times[i],((times[0]-times[i]>86400000*7)));
+	j++;
+	}
+
+	ww = (n4[0]-n4[j-1]).toFixed(2);
+	ee = (n5[0]-n5[j-1]).toFixed(2);
+	
+	ef = (ee/ww).toFixed(2);
+
+	 wellData.wells[id].month = {water:ww,energy:ee,efficiency:ef};
+
+	ww = (n4[0]-0).toFixed(2);
+	ee = (n5[0]-0).toFixed(2);
+		
+	ef = (ee/ww).toFixed(2);
+
+	 wellData.wells[id].year = {water:ww,energy:ee,efficiency:ef};
+
+
+//console.log(times);
+
+    wellData.chartDates.chartInfoDates = times
+    wellData.chartDates.chartCompareDates = times
+
+//    wellData.wells[id].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
+//    wellData.wells[id].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
+//    wellData.wells[id].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
+
+    wellData.wells[id].chartWaterI = n1;
+    wellData.wells[id].chartEnergyI = n2;
+    wellData.wells[id].chartEfficiencyI = n3;
+    wellData.wells[id].chartEngineI = n2;
+ //wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
+ //wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
+
+    drawTables();
+    drawInfo();
+
+        redrawGraphs();
+    $('#page-loader').stop().fadeOut();
+
+}
+
 
 function getNum(prs) { // Распаковывает значения из полученных данных
     len = prs.length;
     tm = parseInt(prs.substring(12,14)+prs.substring(10,12)+prs.substring(8,10)+prs.substring(6,8),16);
     xtm = new Date(tm*1000); tm = xtm.getTime();
-    l1 = parseInt(prs.substring(len-16,len-18)+prs.substring(len-18,len-20)+prs.substring(len-20,len-22)+prs.substring(len-22,len-24),16)/100;
-    p1 = parseInt(prs.substring(len-24,len-26)+prs.substring(len-26,len-28)+prs.substring(len-28,len-30)+prs.substring(len-30,len-32),16)/600;
+//    l1 = parseInt(prs.substring(len-16,len-18)+prs.substring(len-18,len-20)+prs.substring(len-20,len-22)+prs.substring(len-22,len-24),16)/100;
+//    p1 = parseInt(prs.substring(len-24,len-26)+prs.substring(len-26,len-28)+prs.substring(len-28,len-30)+prs.substring(len-30,len-32),16)/300;
+    l1 = parseInt(prs.substring(len-16,len-18)+""+prs.substring(len-18,len-20)+""+prs.substring(len-20,len-22)+""+prs.substring(len-22,len-24),16);
+    p1 = parseInt(prs.substring(len-24,len-26)+""+prs.substring(len-26,len-28)+""+prs.substring(len-28,len-30)+""+prs.substring(len-30,len-32),16);
+
     return {tm,l1,p1}; // Время, вода, электричество
 }
 
 
-
 function getData(data) {  // Обрабатывает ответы от сервера.
+    if (!data.status) return;
     switch(data.cmd) {
     case 'auth_resp':	
     console.log("Token: ",data.token);
-    getIt(1);
-    getIt(2);
-    getIt(5);
+    getRest();
     break;
     case 'get_data_resp':
+    xout = JSON.stringify(data);
+    xid = getId(data.devEui);
 
-//    console.log("-----",data);
-	xout = JSON.stringify(data);
-	xid = getId(data.devEui);
 
-	if (data.data_list.length==0) {
-	    console.log('NOTHING',chartRequest);
-
-	wellData.chartDates.chartInfoDates = chartRequest.slice(1);
-	wellData.chartDates.chartCompareDates = chartRequest;
-
-//	    alert("Data empty");
-          redrawGraphs();
-								// Нет данных. Ничего не делаем, добавить отображение что НЕТ.
+    if (data.data_list.length==0) {
+        console.log('NOTHING',chartRequest);
+    wellData.chartDates.chartInfoDates = chartRequest.slice(1);
+    wellData.chartDates.chartCompareDates = chartRequest;
+        redrawGraphs();
+//	console.log("---------->>>>>>>>>>>>>>>",chartRequest);			
+				// Нет данных. Ничего не делаем, добавить отображение что НЕТ.
           $('#page-loader').stop().fadeOut();
-	    return;
-	}
+        return;
+    }
 
     xx = getNum(data.data_list[0].data); //tm - time, l1 - water, p1 - power
 
-	wellData.wells[xid].totalWater = Math.round((xx.l1+(base[xid][0])/100)*100)/100;
-	wellData.wells[xid].totalEnergy = Math.round((xx.p1+(base[xid][1])/600)*100)/100;
-	wellData.wells[xid].totalEfficiency =[Math.round((xx.p1/xx.l1)*100)/100,1];
+if (data.data_list.length==1) {
 
+return;
+}
+
+    wellData.wells[xid].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
+    wellData.wells[xid].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
+    wellData.wells[xid].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
+
+    
+    times = Array(); n1=Array(); n2 = Array(); n3 = Array(); nr = Array();
+
+//	intr = 0;
+//	console.log(data);
+//	if (data.date_from) intr = data.date_from - data.date_to;
 	
-	times = Array(); n1=Array(); n2 = Array(); n3 = Array();
-
-	intr = 0;
-	if (data.date_from) intr = data.date_from-data.date_to;
-		
 //	if (intr>86400) console.log('ok');
-	console.log(xrange,intr,"----------------------------");
+//	console.log(xrange,intr,"----------------------------");
 
-olddat=dat=oldday=day=inc=0;
+    olddat=dat=oldday=day=inc=0;
 
-	console.log("========================---------------------------=======================");
-	console.log(xrange);
-
-
-    for (i=1;i<data.data_list.length-1;i++) {
-
-	yy = getNum(data.data_list[i].data);
-
-	olddat = dat; oldday = day; xxtm = new Date(yy.tm); day = xxtm.getDay(); dat = yy;
-
+//	console.log("========================---------------------------=======================");
 //	console.log(xrange);
 
-	
-	if (xrange>2) {
-    		if (!olddat) {start = yy; continue;}
-		if (oldday!=day) {
-		
-		dat = new Date(olddat.tm); xnow = new Date();
-		if (!olddat.tm || (olddat.tm<1000000000 || dat>xnow)) continue;
 
+//console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",intr);
 
-		times.push(olddat.tm);
-		n1[inc] = ((start.l1-olddat.l1)*100).toFixed(2);
-		n2[inc] = ((start.p1-olddat.p1)*100).toFixed(2);
-		if (!n1[inc] || !n2[inc]) n3[inc]=0; else n3[inc] = (n2[inc]/n1[inc]).toFixed(2);	
-		inc++;
-		} else continue;	
-	} else {	
+ii=0;
+/*
+for (i in data.data_list) {
+//data_list[i]
 
-	times.push(yy.tm);
-	n1[i-1] = ((xx.l1-yy.l1)*100).toFixed(2);
-	n2[i-1] = ((xx.p1-yy.p1)*100).toFixed(2);
+//    for (i=1;i<data.data_list.length;i++) {
+    
 
-	xx = yy;
+    yy = getNum(data.data_list[i].data);
 
-	n3[i-1] = n2[i-1]/n1[i-1];
-	if (Number.isNaN(n3[i-1]) || isFinite(n3[i-1])) n3[i-1] = 0;
-	}
+    if (yy.tm<1500000000000 || yy.tm>9500000000000 || xx.tm<yy.tm) continue;
 
+    
+    olddat = dat; xxtm = new Date(yy.tm); day = xxtm.getDay(); dat = yy;
+
+    console.log("___",intr,xrange);
+
+    if (!olddat) {olddat=xx;oldday=0;}
+
+	nr[ii] = yy;
+    
+    if (intr>86400*8000000) {
+	if (oldday!=day) {
+	oldday = day;
+	xxdat = new Date(olddat.tm); xnow = new Date();
+	if (!olddat.tm) continue;
+//|| (olddat.tm<1000000000 || xxdat>xnow
+	times[inc] = olddat.tm;
+	n1[inc] = (((olddat.l1-yy.l1))/10).toFixed(2);
+	n2[inc] = (((olddat.p1-yy.p1))/600).toFixed(2);
+	if (!n1[inc] || !n2[inc]) n3[inc]=0; else n3[inc] = (n2[inc]/n1[inc]).toFixed(2);	
+	inc++;
+	} else continue;	
+    } else {	
+
+    times[ii] = yy.tm;
+    n1[ii] = (((xx.l1-yy.l1))/10).toFixed(2);
+    n2[ii] = (((xx.p1-yy.p1))/600).toFixed(2);
+
+    xx = yy;
+
+    n3[ii] = (n2[ii]/n1[ii]).toFixed(2);
+//	if (Number.isNaN(n3[i-1]) || isFinite(n3[i-1])) n3[i-1] = 0;
+    }
+ii++;
    }
 
-	console.log(times,n1,n2,n3);
+*/
+    console.log(times,n1,n2,n3);
 //	console.log(times,n1);
-	wellData.wells[xid].chartWaterI = n1;
-	wellData.wells[xid].chartEnergyI = n2;
-	wellData.wells[xid].chartEfficiencyI = n3;
-	wellData.wells[xid].chartEngineI = n2;
 
-	wellData.wells[xid].chartWaterC = n1;
-	wellData.wells[xid].chartEnergyC = n2;
-	wellData.wells[xid].chartEfficiencyC = n3;
-	wellData.wells[xid].chartEngineC = n2;
+
+//    console.log('=======',wellData.wells[xid].day);
+
+    wellData.wells[xid].chartWaterI = n1;
+    wellData.wells[xid].chartEnergyI = n2;
+    wellData.wells[xid].chartEfficiencyI = n3;
+    wellData.wells[xid].chartEngineI = n2;
+
+    wellData.wells[xid].chartWaterC = n1;
+    wellData.wells[xid].chartEnergyC = n2;
+    wellData.wells[xid].chartEfficiencyC = n3;
+    wellData.wells[xid].chartEngineC = n2;
 
 //console.log("-===========================================================================");
 //console.log(times);
-	wellData.chartDates.chartInfoDates = times
-	wellData.chartDates.chartCompareDates = times
-	drawInfo();
+    ww = ((nr[0].l1 - nr[nr.length-1].l1)/10).toFixed(2);
+    ee = ((nr[0].p1 - nr[nr.length-1].p1)/600).toFixed(2);
+    ef = (ee/ww).toFixed(2);
+//    ee = nr[0].p1 - nr[nr.length-1].p1;
+//    ee = (nr[0].tm-nr[nr.length-1].tm)/1000/60/60;
+//    ef = nr.length;
+    wellData.chartDates.chartInfoDates = times
+    wellData.chartDates.chartCompareDates = times
+    wellData.wells[xid].day = {water:ww,energy:ee,efficiency:ef};
+    wellData.wells[xid].month.efficiency = 33;
+    drawTables();
+    drawInfo();
+
         redrawGraphs();
         $('#page-loader').stop().fadeOut();
-
+    
     break;    
-
-
     }
 
 };
 
+function getRest() {for (i in pumps) {
 
-function getIt(id,datef=0,datet=0,limit=1) {
+
+getIt(i);// drawTables();
+
+}
+
+
+}
+
+function getIt(id,datef=0,datet=0,limit=0) {
 
     var tmp = new Object();
     tmp.cmd = "get_data_req";
+    tmp.xid = id;
     tmp.select = new Object();
+    console.log(":::",datef,datet);
 if (datef) {
     tmp.select.date_from=datef;
+    if (!datet) {datet=datef;}//+86400*1000;} //;datef = datef-86400*1000;}
     tmp.select.date_to=datet;
+    if (!limit) limit=15000;
 } else {
-    limit=100;
+    ttm = new Date();
+    xttm = ttm.getTime(); //-(ttm.getHours()-8)*60*60*1000-ttm.getMinutes()*60*1000+60*60*2*1000;
+    tmp.select.date_from=xttm-86400*30*1000;
+    tmp.select.date_to=xttm;
+    
+ //  tmp.select.limit = limit;
+     limit=10000;
 }
+
+// if(intr>86400000*3) limit=5000; else limit=100;
+    intr=tmp.select.date_to-tmp.select.date_from;
     tmp.select.limit = limit;
     tmp.devEui = pumps[id];
-	console.log(JSON.stringify(tmp));	
-    xws.send(JSON.stringify(tmp));
+//    console.log(JSON.stringify(tmp));	
+//    xws.send(JSON.stringify(tmp));
+    xxws.send(JSON.stringify(tmp));
+
 }
+ 
 
 
     moment.locale('uk');
@@ -245,51 +454,233 @@ if (datef) {
             mode: 'index'
         }
     };
-    let infoChartWater, infoChartEnergy, infoChartCompare, infoChartEngine, compareChartWater, compareChartEnergy, compareChartCompare, compareChartEngine, compareChartWaterData = [], compareChartEnergyData = [], compareChartCompareData = [], compareChartEngineData = [], wellData, chartRequest = [];
+    let infoChartWater, infoChartEnergy, infoChartCompare, infoChartEngine, compareChartWater, compareChartEnergy, compareChartCompare, compareChartEngine, compareChartWaterData = [], compareChartEnergyData = [], compareChartCompareData = [], compareChartEngineData = [], wellData, chartRequest = [], pageTitle = document.title;
 
     // ----- remove chart legend
     Chart.defaults.global.legend.display = false;
 
+
     // ----- data for all wells
-
-
-//            1/*this is the number of well - this numbers will not change*/: {
-//                totalWater: '25468', // this is total water mining
-//                totalEnergy: '145896', // this is total energy expense
-//                totalEfficiency: ['1.858', '1'], // this is total(mean) energy expense; 1 element - expense for 1㎥, 2 element - efficiency - number from 1 to 7 (1 - best efficiency)
-//                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
-//                chartWaterI: [47.618, 24.956, 69.487, 28.236, 32.584, 2.824], // this is water mining for selected period in information mode
-//                chartEnergyI: [18.618, 9.956, 25.487, 8.236, 14.584, 0.824], // this is energy expense for selected period in information mode
-//                chartEfficiencyI: [2.618, 3.956, 3.487, 3.836, 2.584, 1.824], // this is energy expense for 1㎥ for selected period in information mode
-//                chartEngineI: [18.618, 2.956, 12.487, 8.236, 14.584, 1.824], // this is engine work time for selected period in information mode
-//                chartWaterC: [47.618, 24.956, 69.487, 28.236, 32.584, 2.824], // this is water mining for selected period in comparison mode
-//                chartEnergyC: [18.618, 9.956, 25.487, 8.236, 14.584, 0.824], // this is energy expense for selected period in comparison mode
-//                chartEfficiencyC: [2.618, 3.956, 3.487, 3.836, 2.584, 1.824], // this is energy expense for 1㎥ for selected period in comparison mode
-//                chartEngineC: [18.618, 2.956, 12.487, 8.236, 14.584, 1.824] // this is engine work time for selected period in comparison mode
-//            },
-
-
-
     wellData = {
         chartDates/*this is arrays with dates for info and compare modes*/: {
-            chartInfoDates: [1586702022000, 1586961222000, 1587220422000, 1587393222000, 1587825222000, 1588343622000],// this is information charts dates
-            chartCompareDates: [1586702022000, 1586961222000, 1587220422000, 1587393222000, 1587825222000, 1588343622000]// this is comparison charts dates
+            chartInfoDates: [],// this is information charts dates
+            chartCompareDates: []// this is comparison charts dates
         },
         wells/*this is information for each well*/: {
-	    1: {totalWater:0,totalEnergy:0,totalEfficiency:[0,1],lockStatus:0,chartWaterI:[0],chartEnergyI:[0],chartEfficiencyI:[0],chartEngineI:[0],chartWaterC:[0],chartEnergyC:[0],chartEfficiencyC:[0],chartEngineC:[0]},
-	    2: {totalWater:0,totalEnergy:0,totalEfficiency:[0,1],lockStatus:0,chartWaterI:[0],chartEnergyI:[0],chartEfficiencyI:[0],chartEngineI:[0],chartWaterC:[0],chartEnergyC:[0],chartEfficiencyC:[0],chartEngineC:[0]},
-            3: false,
+            1/*this is the number of well - this numbers will not change*/: {
+                day: { // this is table data for last day
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: { // this is table data for last week
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                month: { // this is table data for last month
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                year: { // this is table data for last year
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
+            2:  {
+                day: { // this is table data for last day
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: { // this is table data for last week
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                month: { // this is table data for last month
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                year: { // this is table data for last year
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
+            3:  {
+                day: { // this is table data for last day
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: { // this is table data for last week
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                month: { // this is table data for last month
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                year: { // this is table data for last year
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
             4: false,
-	    5: {totalWater:0,totalEnergy:0,totalEfficiency:[0,1],lockStatus:0,chartWaterI:[0],chartEnergyI:[0],chartEfficiencyI:[0],chartEngineI:[0],chartWaterC:[0],chartEnergyC:[0],chartEfficiencyC:[0],chartEngineC:[0]},
+            5: {
+                day: { // this is table data for last day
+                    water: 1,
+                    energy: 1,
+                    efficiency: 1
+                },
+                week: { // this is table data for last week
+                    water: 2,
+                    energy: 2,
+                    efficiency: 2
+                },
+                month: { // this is table data for last month
+                    water: 3,
+                    energy: 3,
+                    efficiency: 3
+                },
+                year: { // this is table data for last year
+                    water: 4,
+                    energy: 4,
+                    efficiency: 4
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
             6: false,
             7: false,
             8: false,
             9: false,
-            10: false,
-            11: false,
-            12: false,
-            13: false
-        }
+            10:  {
+                day: { // this is table data for last day
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: { // this is table data for last week
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                month: { // this is table data for last month
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                year: { // this is table data for last year
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
+	    11: false,
+	    12: 
+ {
+                day: { // this is table data for last day
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                week: { // this is table data for last week
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                month: { // this is table data for last month
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                year: { // this is table data for last year
+                    water: 0,
+                    energy: 0,
+                    efficiency: 0
+                },
+                totalWater: '0', // this is total water mining
+                totalEnergy: '0', // this is total energy expense
+                totalEfficiency: '0', // this is total(mean) energy expense for 1㎥
+                lockStatus: "0", // this is lock status of well: 1 - opened, 0 - closed
+                chartWaterI: [], // this is water mining for selected period in information mode
+                chartEnergyI: [], // this is energy expense for selected period in information mode
+                chartEfficiencyI: [], // this is energy expense for 1㎥ for selected period in information mode
+                chartEngineI: [], // this is engine work time for selected period in information mode
+                chartWaterC: [], // this is water mining for selected period in comparison mode
+                chartEnergyC: [], // this is energy expense for selected period in comparison mode
+                chartEfficiencyC: [], // this is energy expense for 1㎥ for selected period in comparison mode
+                chartEngineC: [] // this is engine work time for selected period in comparison mode
+            },
+	    13: false
+    	  
+	}    
     };
 
     // ----- redraw information for map and sidebar
@@ -299,7 +690,9 @@ if (datef) {
                 $('.well[data-id="' + n + '"], .map-point[data-id="' + n + '"]').addClass('disabled');
                 $('.well[data-id="' + n + '"] .well-info, .map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>—//— <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>—//— <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart"></i>—//— <span>кВт за м<sup>3</sup></span></li><li><i class="well-lock"></i>—//—</li>');
             }
-            else {                $('.well[data-id="' + n + '"] .well-info, .map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].totalWater + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].totalEnergy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart" data-efficiency="' + wellData.wells[n].totalEfficiency[1] + '"></i>' + wellData.wells[n].totalEfficiency[0] + ' <span>кВт за м<sup>3</sup></span></li><li><i class="well-lock" data-lock="' + wellData.wells[n].lockStatus + '"></i><strong class="well-lock-status">Зачинено</strong><strong class="well-lock-status">Відчинено</strong></li>');
+            else {
+                $('.well[data-id="' + n + '"] .well-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].day.water + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].day.energy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart ef' + (wellData.wells[n].totalEfficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].totalEfficiency > 1.4 ? ' ef-low' : '') + '"></i>' + wellData.wells[n].day.efficiency + '<span>кВт за м<sup>3</sup></span></li><li><i class="well-lock" data-lock="' + wellData.wells[n].lockStatus + '"></i><strong class="well-lock-status">Зачинено</strong><strong class="well-lock-status">Відчинено</strong></li>');
+                $('.map-point[data-id="' + n + '"] .mpi-info').html('<li><i class="icon-water-drop"></i>' + wellData.wells[n].day.water + ' <span>м<sup>3</sup></span></li><li><i class="icon-lighting"></i>' + wellData.wells[n].day.energy + ' <span>кВт</span></li><li><i class="well-efficiency-icon icon-chart ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + '"></i>' + wellData.wells[n].day.efficiency + ' <span>кВт за м<sup>3</sup></span></li>');
             }
         }
     }
@@ -313,7 +706,7 @@ if (datef) {
 
         $('.total-period-info[data-id="3"]').html('<div>З <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[wellData.chartDates.chartInfoDates.length - 1]) + '</strong> по <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[0]) + '</strong> середня витрата електроенергії на видобуток 1 м<sup>3</sup> води</div><div>' + computeMiddle(wellData.wells[$('.well.is-info').attr('data-id')].chartEfficiencyI) + ' <span>кВт</span></div>');
 
-        $('.total-period-info[data-id="4"]').html('<div>З <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[wellData.chartDates.chartInfoDates.length - 1]) + '</strong> по <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[0]) + '</strong> двигун працював</div><div>' + computeTotal(wellData.wells[$('.well.is-info').attr('data-id')].chartEngineI) + ' <span>год.</span></div>');
+        $('.total-period-info[data-id="4"]').html('<div>З <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[wellData.chartDates.chartInfoDates.length - 1] + '</strong> по <strong>' + setTimestampDate(wellData.chartDates.chartInfoDates[0])) + '</strong> двигун працював</div><div>' + computeTotal(wellData.wells[$('.well.is-info').attr('data-id')].chartEngineI) + ' <span>год.</span></div>');
 
     }
 
@@ -574,39 +967,76 @@ if (datef) {
     }
 
     // ----- this is requests from period selection
+    function drawTables() {
+
+$('#table-day tbody > tr').remove();
+$('#table-summary tbody >tr').remove();
+
+    for(let n in wellData.wells) {
+        if(wellData.wells[n] !== false) {
+            $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
+            $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
+        }
+    }
+
+    $(".table").on('mouseenter', 'td', function(){
+        $(this).closest('.table').find('tbody tr td:nth-of-type(' + ($(this).index() + 1) + ')').addClass('highlighted');
+        $(this).siblings('td').addClass('highlighted');
+    }).on('mouseleave', 'td', function(){
+        $('.table').find('tbody tr td').removeClass('highlighted');
+    });
+
+    // ----- day table add class for sorting
+    $('#table-day th').click(function () {
+        if($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+        }
+        else if($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+        }
+        else {
+            $('#table-day th').removeClass('asc desc');
+            $(this).addClass('asc');
+        }
+    });
+
+    // ----- day table sorting
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+            v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+    document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
+        const table = $(th).closest('table').find('tbody')[0];
+        Array.from(table.querySelectorAll('tr:nth-child(n+1)'))
+            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+            .forEach(tr => table.appendChild(tr));
+    })));
+
+
+    }
+
     function dataRequest() {
 
-	if (!chartRequest[2]) {chartRequest[2] = chartRequest[1];chartRequest[1] = chartRequest[1]-86400*1000;}
-	console.log(chartRequest);
+    if (!chartRequest[2]) {chartRequest[2] = chartRequest[1];chartRequest[1] = chartRequest[1]-86400*1000;}
+//    console.log(chartRequest);
          $('#page-loader').stop().fadeIn();
-
-	getIt(chartRequest[0],chartRequest[1],chartRequest[2],5000);
-//	getIt(2,chartRequest[1],chartRequest[2],5000);
-//	getIt(5,chartRequest[1],chartRequest[2],5000);
+//    console.log(":::::::::::::::",chartRequest,chartRequest[1]);
+    getIt(1,chartRequest[1],chartRequest[2],5000);
+	getIt(2,chartRequest[1],chartRequest[2],5000);
+	getIt(5,chartRequest[1],chartRequest[2],5000);
 //    drawInfo();
 //    drawGraphs();
 //    redrawGraphs();
 //	console.log("realy?");
-        /**
-         * when this request is going you will array named "chartRequest"
-         * in this array you will get 2 or 3 elements - example ["1", 1589835600000, 1590699600000]: two elements - single date, three elements range dates
-         * first element - is a view request: 1 - is for information charts, 2 - is for comparison charts
-         * second element is requested date if 2 elements in array; and start date if 3 elements in array
-         * third element is final date
-         *
-         * before request starts set next function
-         * $('#page-loader').stop().fadeIn();
-         *
-         * after request ended rewrite "wellData" with new data and set following functions
-         * redrawGraphs();
-         * $('#page-loader').stop().fadeOut();
-         */
-	
     }
 
     // ----- draw all information at first time
     drawInfo();
     drawGraphs();
+//    drawTables();
+    // ----- draw tables
+
+    // ----- tables highlight cells
 
     // ----- hide page preloader
     $('#page-loader').stop().fadeOut();
@@ -614,9 +1044,10 @@ if (datef) {
     // ----- toggle views
     $('.head-select ul li').click(function () {
         $('.head-select ul li').removeClass('active');
-        _body.removeClass('head-select-map head-select-info head-select-compare').addClass($(this).attr('class'));
+        _body.removeClass('head-select-tables head-select-map head-select-info head-select-compare').addClass($(this).attr('class'));
         $(this).addClass('active');
-        $('.map, .graphs, .comparison').hide();
+        $('.tables, .map, .graphs, .comparison').hide();
+        $(this).hasClass('head-select-tables') && $('.tables').show();
         $(this).hasClass('head-select-map') && $('.map').show();
         $(this).hasClass('head-select-info') && $('.graphs').show();
         $(this).hasClass('head-select-compare') && $('.comparison').show();
@@ -687,6 +1118,9 @@ if (datef) {
             $(this).closest('.well').toggleClass('tooltip-shown');
             $('.map-point[data-id="' + $(this).closest('.well').attr('data-id') + '"]').toggleClass('tooltip-shown');
         }
+        if($(this).closest('.head-select-tables').length) {
+            $(this).siblings('.well-btn').click();
+        }
 
     });
 
@@ -717,8 +1151,6 @@ if (datef) {
 
             requestCommon();
 
-	     xrange = dataPeriod;
-
             if(dataPeriod === 1) {
                 chartRequest.push(+ new Date());
             }
@@ -736,7 +1168,6 @@ if (datef) {
             if(dataPeriod === 5) {
                 if(new Date().getDate() === 1) {
                     chartRequest.push(+ new Date());
-
                 }
                 else {
                     chartRequest.push(+ new Date(Date.now() - ((new Date().getDate() - 1)*24*60*60*1000)));
@@ -924,6 +1355,11 @@ if (datef) {
         $('.map-point[data-id="' + $(this).closest('.well').attr('data-id') + '"]').removeClass('tooltip-visible');
     });
 
+    // ----- print info tables
+    $('.print-btn').click(function () {
+        window.print();
+    });
+
     // ----- common data for all requests
     function requestCommon() {
         chartRequest.length = 0;
@@ -947,28 +1383,31 @@ if (datef) {
 
     }
 
-    // ----- compute total graph value
     function computeTotal(el) {
         let total = 0;
         for(let i = 0; i < el.length; i++) {
-	  if (el[i])  total += el[i]*1;
+      if (el[i])  total += el[i]*1;
         }
-        return total//.toFixed(1);
+        return total.toFixed(2);
 //	    return 0;
     }
 
     // ----- compute middle graph value
     function computeMiddle(el) {
-        let total = 0; count = 0;
+        let total = 0; count = 0;
         for(let i = 0; i < el.length; i++) {
-            if ((el[i])) {total += el[i];count++;}
+//		if (!el) continue;
+            if ((el[i]) && (el[i]!= Infinity)  && !isNaN(el[i])) {total = total+parseInt(el[i]*100);count++;}
         }
-	if (total === Infinity || total === 0) return 0; else return (total/count).toFixed(3);
+    
+    if (count && total) return (total/count/100).toFixed(2); else return 0;
+
 //(total/count).toFixed(3); else return 0;
 //	return total;
     }
 
 });
+
 
 $(window).resize(function () {
 
@@ -976,5 +1415,3 @@ $(window).resize(function () {
     $('.sidebar').removeClass('active');
 
 });
-
-

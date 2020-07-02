@@ -10,7 +10,7 @@
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <script src="js/jquery-3.2.1.min.js"></script>
 </head>
-<body class="head-select-map">
+<body class="head-select-tables">
 
     <header class="header">
         <div class="clearfix">
@@ -23,11 +23,12 @@
             </a>
             <div class="head-select">
                 <div class="head-select-selected">
-                    <span>Мапа</span>
+                    <span>Дані</span>
                     <i class="icon-arrow-down"></i>
                 </div>
                 <ul>
-                    <li class="head-select-map active">Мапа</li>
+                    <li class="head-select-tables active">Дані</li>
+                    <li class="head-select-map">Мапа</li>
                     <li class="head-select-info">Інфо</li>
                     <li class="head-select-compare">Порівняння</li>
                 </ul>
@@ -186,13 +187,63 @@
 
     <div class="content">
 
+        <div class="tables">
+            <button type="button" class="print-btn">Роздрукувати / Зберегти</button>
+            <div class="content-box">
+                <h3>За останню добу з 7:00 по 7:00</h3>
+                <div class="table-wrap">
+                    <table class="table" id="table-day">
+                        <thead>
+                            <tr>
+                                <th>№ Свердловини</th>
+                                <th>Вода, м<sup>3</sup></th>
+                                <th>Енергія, кВт</th>
+                                <th>Ефективність, кВт/м<sup>3</sup></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="content-box">
+                <h3>За останній тиждень, місяць, рік</h3>
+                <div class="table-wrap">
+                    <table class="table" id="table-summary">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">№ Свердловини</th>
+                                <th colspan="3">Тиждень</th>
+                                <th colspan="3">Місяць</th>
+                                <th colspan="3">Рік</th>
+                            </tr>
+                            <tr>
+                                <th>Вода, <span>м<sup>3</sup></span></th>
+                                <th>Енергія, <span>кВт</span></th>
+                                <th>Ефективність, <span>кВт/м<sup>3</sup></span></th>
+                                <th>Вода, <span>м<sup>3</sup></span></th>
+                                <th>Енергія, <span>кВт</span></th>
+                                <th>Ефективність, <span>кВт/м<sup>3</sup></span></th>
+                                <th>Вода, <span>м<sup>3</sup></span></th>
+                                <th>Енергія, <span>кВт</span></th>
+                                <th>Ефективність, <span>кВт/м<sup>3</sup></span></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div class="map">
             <div class="map-wrap">
                 <div class="map-overflow">
                     <div class="map-inner">
                         <img src="img/map-edited-1.jpg" alt="water stations map">
                         <div class="map-point" data-id="1">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">1</i>
+<!--
+                            <img src="img/well-icon.svg">
+//-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №1</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -200,7 +251,11 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="2">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">2</i>
+<!--
+
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
+//-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №2</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -208,7 +263,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="3">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">3</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №3</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -216,7 +272,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="4">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">4</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-left">
                                 <h4>Свердловина №4</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -224,7 +281,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="5">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">5</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-left">
                                 <h4>Свердловина №5</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -232,7 +290,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="6">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">6</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-left">
                                 <h4>Свердловина №6</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -240,7 +299,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="7">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">7</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №7</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -248,7 +308,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="8">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">8</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-left">
                                 <h4>Свердловина №8</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -256,7 +317,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="9">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">9</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №9</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -264,7 +326,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="10">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">10</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner bottom-left">
                                 <h4>Свердловина №10</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -272,7 +335,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="11">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">11</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-right">
                                 <h4>Свердловина №11</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -280,7 +344,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="12">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">12</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner top-right">
                                 <h4>Свердловина №12</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>
@@ -288,7 +353,8 @@
                             </div>
                         </div>
                         <div class="map-point" data-id="13">
-                            <img src="img/well-icon.svg" alt="well">
+                            <i class="map-point-number">13</i>
+                            <!-- <img src="img/well-icon.svg" alt="well"> //-->
                             <div class="map-point-inner bottom-right">
                                 <h4>Свердловина №13</h4>
                                 <button type="button" class="map-point-inner-btn">×</button>

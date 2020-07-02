@@ -12,11 +12,11 @@
 
 	<div class="lf-wrap">
 		<div>
-			<form class="login-form">
+			<form class="login-form" onsubmit="xlogin(this)">
 				<label>Ваш логін</label>
-				<input type="text" placeholder="Логін">
+				<input type="text" name="user" placeholder="Логін">
 				<label>Ваш пароль</label>
-				<input type="text" placeholder="Пароль">
+				<input type="text" name="passwd" placeholder="Пароль">
 				<button type="submit">Вхід</button>
 				<div class="login-form-error-message">Дані вказано невірно!</div>
 				<!--
@@ -31,5 +31,33 @@
 			</form>
 		</div>
 	</div>
+	<script>
+		const xws = new WebSocket('ws://dutch.lora-wan.net:8002/');
+		function init(a) {xws.send(JSON.stringify({login:a.user.value,password:a.passwd.value,cmd:'auth_req'}));}
+		xws.onopen = function() {console.log('init');};
+		xws.onmessage = function(e) {
+  			try{
+				json = JSON.parse(e.data);
+				console.log(e.data);
+				if (!json.status) return;
+				if (json.cmd=='auth_resp') {
+					if (json.token) document.cookie='Token='+json.token;
+					top.location="/";
+				} 
+
+    			}
+     		catch(err) {console.log(err);}
+		};
+
+
+		function xlogin(f) {
+		init(f);
+//		alert(f.user.value);
+		event.returnValue = false;
+//		console.log("Test");
+//		return false;
+		}
+
+	</script>
 </body>
 </html>
