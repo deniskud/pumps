@@ -40,7 +40,7 @@ wss.on('connection', function connection(ws) {
 				}
 
 //dpumps[msg.xid][i];	
-//console.log(i,dpumps[msg.xid][i]);
+console.log(i,dpumps[msg.xid][i]);
 
 			}				
 			if (out.length) ws.send(JSON.stringify({id:msg.xid,df:msg.select.date_from,dt:msg.select.date_to,data:out}));	
