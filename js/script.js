@@ -107,10 +107,13 @@ if (xxx) {
 
 	n1[i] = (parseInt(data.data[i][1])/10).toFixed(2);
 	n2[i] = (parseInt(data.data[i][2])/600).toFixed(2);
-	if (!n1[i] || !n2[i]) n3[i]=0; else n3[i] = (n2[i]/n1[i]).toFixed(2);
+//	if (!n1[i] || !n2[i]) n3[i]=0; else n3[i] = (n2[i]/n1[i]).toFixed(2);
+//by zlodey
+	if (n1[i]) n3[i] = (n2[i]/n1[i]).toFixed(2);
+        else n3[i]=0;
 
 } else {
-//console.log("ok"); else console.log("fuck");
+//console.log("ok"); else console.log("Error!");
 //console.log("-");
 	n1[i] = "5";
 	n2[i] = "5";
@@ -134,18 +137,24 @@ ef = 0;
 	n2[j] = (parseInt(data.data[i][2])/600).toFixed(2);
 	n4[j] = (parseInt(data.data[i][3])/10).toFixed(2);
 	n5[j] = (parseInt(data.data[i][4])/600).toFixed(2);
-	if (!n1[j] || !n2[j]) n3[j]=0; else n3[j] = (n2[j]/n1[j]).toFixed(2);	
+
+	if (n1[j]) n3[j] = (n2[j]/n1[j]).toFixed(2);	
+       else n3[j]=0;
 
 	if (times[0]-times[i]>86400000) {if (!flagd) {flagd = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
 
-	ef = (ee/ww).toFixed(2);
+      //by zlodey
+	if (ww) ef = (ee/ww).toFixed(2);
+        else ww=0;  //by zlodey
 
 	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
 
 	}}
 	if (times[0]-times[i]>86400000*7) {if (!flagw) {flagw = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
 
-	ef = (ee/ww).toFixed(2);
+	 //by zlodey
+	if (ww) ef = (ee/ww).toFixed(2);
+	else ww=0;  //by zlodey
 
 	 wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
 
@@ -159,14 +168,16 @@ ef = 0;
 	ww = (n4[0]-n4[j-1]).toFixed(2);
 	ee = (n5[0]-n5[j-1]).toFixed(2);
 	
-	ef = (ee/ww).toFixed(2);
+	if (ww) ef = (ee/ww).toFixed(2);
+	else ww=0; //by zlodey
 
 	 wellData.wells[id].month = {water:ww,energy:ee,efficiency:ef};
 
 	ww = (n4[0]-0).toFixed(2);
 	ee = (n5[0]-0).toFixed(2);
 		
-	ef = (ee/ww).toFixed(2);
+	if (ww) ef = (ee/ww).toFixed(2);
+        else ww=0; //by zlodey
 
 	 wellData.wells[id].year = {water:ww,energy:ee,efficiency:ef};
 
