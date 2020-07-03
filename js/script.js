@@ -78,7 +78,7 @@ function newData(data) {
 //xdat = JSON.parse(data);
 //console.log(data);
 id = data.id;
-//console.log(id);
+console.log(">>>>>",id);
 //    wellData.wells[xid].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
 //    wellData.wells[xid].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
 //    wellData.wells[xid].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
@@ -92,36 +92,6 @@ var start = parseInt(data.dt);
 //JSON.stringify(data);
 h = parseInt((start-end)/3600000);
 console.log("---------------- ",data.df,data.dt,h);
-
-//    for (i in data.data) {
-//console.log(">>>",i,data.data[i]);
-//   }
-
-/*
-for (i = 0;i<h;i++) {
-
-if (data.data[i]) xxx = parseInt(data.data[i][0]); else xxx = 0;
-times[i] = end+i*3600000;
-
-if (xxx) {
-
-	n1[i] = (parseInt(data.data[i][1])/10).toFixed(2);
-	n2[i] = (parseInt(data.data[i][2])/600).toFixed(2);
-//	if (!n1[i] || !n2[i]) n3[i]=0; else n3[i] = (n2[i]/n1[i]).toFixed(2);
-//by zlodey
-	if (n1[i]) n3[i] = (n2[i]/n1[i]).toFixed(2);
-        else n3[i]=0;
-
-} else {
-//console.log("ok"); else console.log("Error!");
-//console.log("-");
-	n1[i] = "5";
-	n2[i] = "5";
-	n3[i] = "0.0001";
-}
-
-}
-*/
 
 
 ww = 0;
@@ -139,23 +109,33 @@ ef = 0;
 	n5[j] = (parseInt(data.data[i][4])/600).toFixed(2);
 
 	if (n1[j]) n3[j] = (n2[j]/n1[j]).toFixed(2);	
-       else n3[j]=0;
 
-	if (times[0]-times[i]>86400000) {if (!flagd) {flagd = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+       else n3[j]=0;
 
-      //by zlodey
+	if (times[0]-times[i]>86400000) {
+
+		console.log(">",id,"day");
+		if (!flagd) {flagd = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+
+
+      //by zlodey
 	if (ww) ef = (ee/ww).toFixed(2);
         else ww=0;  //by zlodey
 
 	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
 
 	}}
-	if (times[0]-times[i]>86400000*7) {if (!flagw) {flagw = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+	if (times[0]-times[i]>86400000*7) {
+		console.log(">",id,"week");
+
+		if (!flagw) {flagw = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
+
 
 	 //by zlodey
 	if (ww) ef = (ee/ww).toFixed(2);
 	else ww=0;  //by zlodey
 
+	 console.log(">> ",id,ww,ee);
 	 wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
 
 
