@@ -120,7 +120,7 @@ ef = 0;
 
       //by zlodey
 	if (ww) ef = (ee/ww).toFixed(2);
-        else ww=0;  //by zlodey
+        else ef=0;  //by zlodey
 
 	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
 
@@ -133,7 +133,7 @@ ef = 0;
 
 	 //by zlodey
 	if (ww) ef = (ee/ww).toFixed(2);
-	else ww=0;  //by zlodey
+	else ef=0;  //by zlodey
 
 	 console.log(">> ",id,ww,ee);
 	 wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
@@ -149,7 +149,7 @@ ef = 0;
 	ee = (n5[0]-n5[j-1]).toFixed(2);
 	
 	if (ww) ef = (ee/ww).toFixed(2);
-	else ww=0; //by zlodey
+	else ef=0; //by zlodey
 
 	 wellData.wells[id].month = {water:ww,energy:ee,efficiency:ef};
 
@@ -157,7 +157,7 @@ ef = 0;
 	ee = (n5[0]-0).toFixed(2);
 		
 	if (ww) ef = (ee/ww).toFixed(2);
-        else ww=0; //by zlodey
+        else ef=0; //by zlodey
 
 	 wellData.wells[id].year = {water:ww,energy:ee,efficiency:ef};
 
@@ -320,7 +320,8 @@ ii++;
 //console.log(times);
     ww = ((nr[0].l1 - nr[nr.length-1].l1)/10).toFixed(2);
     ee = ((nr[0].p1 - nr[nr.length-1].p1)/600).toFixed(2);
-    ef = (ee/ww).toFixed(2);
+    if (ww) ef = (ee/ww).toFixed(2);
+    else ef=0;
 //    ee = nr[0].p1 - nr[nr.length-1].p1;
 //    ee = (nr[0].tm-nr[nr.length-1].tm)/1000/60/60;
 //    ef = nr.length;
