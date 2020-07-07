@@ -117,7 +117,8 @@ var dpumps = Array();
 
 function save_data(id) {
 
-dpumps[id] = dpump; dpump={};
+    dpumps[id] = dpump; 
+    dpump={};
 //console.log(dpump);
 console.log(">>>>",id,count);
 count=0;
@@ -126,10 +127,10 @@ count=0;
 starts = {
 	1:1586951000000,
 	2:1586951000000,
-	3:1576951000000,
+	3:1593425410000,
 	5:1586951000000,
 	10:1586951000000,
-	12:1586951000000
+	12:1593820800000
 }
 pumps = {       // Lora devEui  для счетчиков
         1:"323033375D387201",
@@ -159,8 +160,7 @@ if (datef) {
     if (!limit) limit=5000;
 } else {
     ttm = new Date();
-    xttm = ttm.getTime()-(ttm.getHours()-8)*60*60*1000-ttm.getMinutes()*60*1000+
-60*60*2*1000;
+    xttm = ttm.getTime()-(ttm.getHours()-8)*60*60*1000-ttm.getMinutes()*60*1000;//+60*60*2*1000;
 //    tmp.select.date_to=xttm;
 //    tmp.select.date_from=xttm-86500*1000;
         tmp.select.date_from=0;
@@ -175,6 +175,8 @@ if (datef) {
 }
 
 
+
+
     c.on("message", function(msg) {
 	var json = JSON.parse(msg.utf8Data);
 //	console.log(">>>",json.cmd);
@@ -183,7 +185,7 @@ if (datef) {
 
 	case "auth_resp":
 	console.log("Auth");
-	for (i in pumps) getIt(i);
+	refresh();
         break;
 
 	case "get_data_resp":
@@ -199,8 +201,14 @@ if (datef) {
 
     });
 
+function refresh () {
+	for (i in pumps) getIt(i);
+
+}
+setInterval(refresh, 1000*600);
+
+
     c.sendUTF(JSON.stringify({login:'stas',password:'josperado',cmd:'auth_req'}));
 }
-
 
 

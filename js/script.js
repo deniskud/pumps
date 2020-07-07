@@ -4,7 +4,7 @@
  */
 
 
-
+top.xtimes = Array();
 xrange = 0;
 nows = 1; 
 intr = 0;
@@ -75,6 +75,8 @@ xws.onmessage = function(e) {
 
 function newData(data) {
 
+
+
 //xdat = JSON.parse(data);
 //console.log(data);
 id = data.id;
@@ -98,9 +100,13 @@ ww = 0;
 ee = 0;
 ef = 0;
 
+wk = 0;
+ek = 0;
+
 
     flagd = false;
     flagw = false;
+
     for (i in data.data) {   
 	times[i] = parseInt(data.data[i][0]);  
 	n1[j] = (parseInt(data.data[i][1])/10).toFixed(2);
@@ -121,10 +127,23 @@ ef = 0;
       //by zlodey
 	if (ww) ef = (ee/ww).toFixed(2);
         else ef=0;  //by zlodey
-
+	if (isNaN(ef)) ef=0;
 	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
 
 	}}
+
+	if (i && times[0]-times[i]<86400000*7) {
+		
+			
+	wwk = parseInt((n4[j-1]-n4[j]));
+	eek = parseInt((n5[j-1]-n5[j]));
+	if (wwk) wk+=wwk;
+	if (eek) ek+=eek;
+	
+//		console.log("+++",wk);
+	}
+
+/*
 	if (times[0]-times[i]>86400000*7) {
 		console.log(">",id,"week");
 
@@ -140,16 +159,26 @@ ef = 0;
 
 
 	}}
- 
+*/ 
+
 //	console.log(">>",times[0]-times[i],((times[0]-times[i]>86400000*7)));
 	j++;
 	}
+	top.xtimes[id] = times;
+
+	wk = wk.toFixed(2);
+	ek = ek.toFixed(2);
+	if (wk) ef = (ee/ww).toFixed(2); else ef=0; 
+	if (isNaN(ef)) ef=0;
+	 wellData.wells[id].week = {water:wk,energy:ek,efficiency:ef};
+	
 
 	ww = (n4[0]-n4[j-1]).toFixed(2);
 	ee = (n5[0]-n5[j-1]).toFixed(2);
 	
 	if (ww) ef = (ee/ww).toFixed(2);
 	else ef=0; //by zlodey
+	if (isNaN(ef)) ef=0;
 
 	 wellData.wells[id].month = {water:ww,energy:ee,efficiency:ef};
 
@@ -158,14 +187,15 @@ ef = 0;
 		
 	if (ww) ef = (ee/ww).toFixed(2);
         else ef=0; //by zlodey
+	if (isNaN(ef)) ef=0;
 
 	 wellData.wells[id].year = {water:ww,energy:ee,efficiency:ef};
 
 
 //console.log(times);
 
-    wellData.chartDates.chartInfoDates = times
-    wellData.chartDates.chartCompareDates = times
+    wellData.chartDates.chartInfoDates = top.xtimes[id];
+    wellData.chartDates.chartCompareDates = top.xtimes[id];
 
 //    wellData.wells[id].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
 //    wellData.wells[id].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
@@ -178,6 +208,7 @@ ef = 0;
  //wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
  //wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
 
+console.log(id,times,n1);
     drawTables();
     drawInfo();
 
@@ -300,7 +331,7 @@ ii++;
    }
 
 */
-    console.log(times,n1,n2,n3);
+    console.log("$$$",times,n1,n2,n3);
 //	console.log(times,n1);
 
 
@@ -315,9 +346,9 @@ ii++;
     wellData.wells[xid].chartEnergyC = n2;
     wellData.wells[xid].chartEfficiencyC = n3;
     wellData.wells[xid].chartEngineC = n2;
-
+    top.xtimes[xid] = times;
 //console.log("-===========================================================================");
-//console.log(times);
+//console.log(top.xtimes);
     ww = ((nr[0].l1 - nr[nr.length-1].l1)/10).toFixed(2);
     ee = ((nr[0].p1 - nr[nr.length-1].p1)/600).toFixed(2);
     if (ww) ef = (ee/ww).toFixed(2);
@@ -325,8 +356,8 @@ ii++;
 //    ee = nr[0].p1 - nr[nr.length-1].p1;
 //    ee = (nr[0].tm-nr[nr.length-1].tm)/1000/60/60;
 //    ef = nr.length;
-    wellData.chartDates.chartInfoDates = times
-    wellData.chartDates.chartCompareDates = times
+    wellData.chartDates.chartInfoDates = top.xtimes[xid];
+    wellData.chartDates.chartCompareDates = top.xtimes[xid];
     wellData.wells[xid].day = {water:ww,energy:ee,efficiency:ef};
     wellData.wells[xid].month.efficiency = 33;
     drawTables();
@@ -870,8 +901,10 @@ if (datef) {
 
     // ----- redrawing of graphs on time changed or other well selected
     function redrawGraphs() {
-
         let infoWell = $('.well.is-info').attr('data-id');
+
+wellData.chartDates.chartInfoDates = top.xtimes[infoWell];
+console.log(">>",infoWell,top.xtimes);
 
         infoChartWater.data.labels = infoChartEnergy.data.labels = infoChartCompare.data.labels = infoChartEngine.data.labels = wellData.chartDates.chartInfoDates;
 
