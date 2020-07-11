@@ -55,7 +55,7 @@ console.log(i,dpumps[msg.xid][i]);
 
 var dpump = Array();
 //console.log(dpump);
-
+xfirst = false;
 var ltime = ptime = 0;
 var v_l1 = v_p1 = v1_l1 = v1_p1 = 0;
 var count = 0;
@@ -65,23 +65,26 @@ function geth(tm) {
 	return xx.getTime()-xx.getMinutes()*60000;
 }
 
-
 function xparse(id,prs) {
+
+//	if (!xfirst) {xfirst = true; return;}	
 //console.log(">>>>>>>>>>",prs)
     len = prs.length;
     tm = parseInt(prs.substring(12,14)+prs.substring(10,12)+prs.substring(8,10)+prs.substring(6,8),16);
     xtm = new Date(tm*1000); tm = xtm.getTime();
     if (tm<1500000000000 || tm>2000000000000) return;
+    if (tm<starts[id]) return;
+
     l1 = parseInt(prs.substring(len-16,len-18)+""+prs.substring(len-18,len-20)+""+prs.substring(len-20,len-22)+""+prs.substring(len-22,len-24),16);
     p1 = parseInt(prs.substring(len-24,len-26)+""+prs.substring(len-26,len-28)+""+prs.substring(len-28,len-30)+""+prs.substring(len-30,len-32),16);
 //    return {tm,l1,p1}; // Время, вода, электричество
-    if (tm<starts[id]) return;
 
 
     if (ltime == 0) {
 	ltime = tm;
 	ptime = tm;
 	hr = xtm.getHours();
+	dd = xtm.getDate();
      	v_l1 = l1;
 	v_p1 = p1;
      	v1_l1 = l1;
@@ -92,7 +95,7 @@ function xparse(id,prs) {
     diff = ltime-tm;
 
 	xhr = xtm.getHours();
-
+	xdd = xtm.getDate();
 	if (xhr!=hr) {
 		v_l1 = v_l1-l1;v_p1 = v_p1-p1;
 		if (v_l1>0 || v_p1>0) {
@@ -104,8 +107,9 @@ function xparse(id,prs) {
 	     	v_l1 = l1;
 		v_p1 = p1;
 	hr = xhr;
-	} else {
-
+	} else if (xdd!=dd)  {
+		
+		
 
 
 	}
@@ -114,9 +118,9 @@ function xparse(id,prs) {
 }
 
 var dpumps = Array();
-
+xfirst = false;
 function save_data(id) {
-
+xfirst = false;
     dpumps[id] = dpump; 
     dpump={};
 //console.log(dpump);
@@ -126,8 +130,9 @@ count=0;
 
 starts = {
 	1:1586951000000,
-	2:1586951000000,
-	3:1593425410000,
+//	2:1586951000000,
+	2:1593800962000,
+	3:1586951000000,
 	5:1586951000000,
 	10:1586951000000,
 	12:1593820800000
@@ -191,6 +196,7 @@ if (datef) {
 	case "get_data_resp":
 	devid = getId(json.devEui);
 	if (json.data_list.length) {
+	
 	for (i in json.data_list) if (json.data_list[i]) xparse(devid,json.data_list[i].data);
 	}
 	save_data(devid);

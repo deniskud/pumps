@@ -85,6 +85,20 @@ console.log(">>>>>",id);
 //    wellData.wells[xid].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
 //    wellData.wells[xid].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
 
+ wellData.wells[id].chartWaterI = Array();
+    wellData.wells[id].chartEnergyI = Array();
+    wellData.wells[id].chartEfficiencyI = Array();
+    wellData.wells[id].chartEngineI = Array();
+
+    wellData.wells[id].chartWaterC = Array();
+    wellData.wells[id].chartEnergyC = Array();
+    wellData.wells[id].chartEfficiencyC = Array();
+    wellData.wells[id].chartEngineC = Array();
+    top.xtimes[id] = Array();;
+    wellData.wells[id].totalWater = 0;
+    wellData.wells[id].totalEnergy = 0;
+    wellData.wells[id].totalEfficiency = 0;
+
     times = Array(); n1=Array(); n2 = Array(); n3 = Array(); n4 = Array(); n5 = Array(); nr = Array();
 j = 0;
 
@@ -103,6 +117,10 @@ ef = 0;
 wk = 0;
 ek = 0;
 
+dwk = 0;
+dek = 0;
+
+
 
     flagd = false;
     flagw = false;
@@ -118,8 +136,18 @@ ek = 0;
 
        else n3[j]=0;
 
-	if (times[0]-times[i]>86400000) {
+	if ((times[0]-times[i])<86400000) {
 
+	dwwk = parseInt((n1[j]));
+	deek = parseInt((n2[j]));
+
+	console.log(":::",times[j],id,dwwk,deek);
+
+	if (dwwk) dwk+=dwwk;
+	if (deek) dek+=deek;
+
+/*
+		
 		console.log(">",id,"day");
 		if (!flagd) {flagd = true; ww = (n4[0]-n4[j]).toFixed(2);ee=(n5[0]-n5[j]).toFixed(2);
 
@@ -130,9 +158,12 @@ ek = 0;
 	if (isNaN(ef)) ef=0;
 	 wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
 
-	}}
+	}
+*/
 
-	if (i && times[0]-times[i]<86400000*7) {
+}
+
+	if (i && (times[0]-times[i])<86400000*7) {
 		
 			
 	wwk = parseInt((n4[j-1]-n4[j]));
@@ -166,9 +197,19 @@ ek = 0;
 	}
 	top.xtimes[id] = times;
 
+	dwk = dwk.toFixed(2);
+	dek = dek.toFixed(2);
+	
+	if (dwk) ef = (dek/dwk).toFixed(2);
+	else ef=0;  //by zlodey
+
+	 console.log(">>--- ",id,dwk,dek);
+	 wellData.wells[id].day = {water:dwk,energy:dek,efficiency:ef};
+
+
 	wk = wk.toFixed(2);
 	ek = ek.toFixed(2);
-	if (wk) ef = (ee/ww).toFixed(2); else ef=0; 
+	if (wk) ef = (ek/wk).toFixed(2); else ef=0; 
 	if (isNaN(ef)) ef=0;
 	 wellData.wells[id].week = {water:wk,energy:ek,efficiency:ef};
 	
@@ -242,8 +283,22 @@ function getData(data) {  // Обрабатывает ответы от серв
     xout = JSON.stringify(data);
     xid = getId(data.devEui);
 
+    wellData.wells[xid].chartWaterI = Array();
+    wellData.wells[xid].chartEnergyI = Array();
+    wellData.wells[xid].chartEfficiencyI = Array();
+    wellData.wells[xid].chartEngineI = Array();
 
-    if (data.data_list.length==0) {
+    wellData.wells[xid].chartWaterC = Array();
+    wellData.wells[xid].chartEnergyC = Array();
+    wellData.wells[xid].chartEfficiencyC = Array();
+    wellData.wells[xid].chartEngineC = Array();
+    top.xtimes[xid] = Array();;
+    wellData.wells[xid].totalWater = 0;
+    wellData.wells[xid].totalEnergy = 0;
+    wellData.wells[xid].totalEfficiency = 0;
+
+
+   if (data.data_list.length==0) {
         console.log('NOTHING',chartRequest);
     wellData.chartDates.chartInfoDates = chartRequest.slice(1);
     wellData.chartDates.chartCompareDates = chartRequest;
