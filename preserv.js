@@ -15,8 +15,6 @@ wss.on('connection', function connection(ws) {
 
 	msg = JSON.parse(message);
 
-//	console.log(msg);
-
 	switch(msg.cmd) {
 
 		case "start":
@@ -25,24 +23,30 @@ wss.on('connection', function connection(ws) {
 
 		case "get_data_req":
 
+			h = (msg.select.date_to-msg.select.date_from)/3600000;
 
-		console.log(msg.select.date_from,msg.select.date_to,msg.xid);
+
+			console.log(">>>",h);
 
 			out = Array();
+
+			xdd = -1;
+
 			for (i in dpumps[msg.xid]) {
-//				console.log(i,dpumps[msg.xid][i]);
+//				console.log(dpumps[msg.xid][i].t,dpumps[msg.xid][i]);
+			t = dpumps[msg.xid][i].t;
 
-			if (parseInt(i)>parseInt(msg.select.date_from) && parseInt(i)<parseInt(msg.select.date_to)) {
 
-				tmp = [i,dpumps[msg.xid][i].v_l1,dpumps[msg.xid][i].v_p1,dpumps[msg.xid][i].l1,dpumps[msg.xid][i].p1];
+			if (parseInt(t)>starts[msg.xid] && parseInt(t)>parseInt(msg.select.date_from) && parseInt(i)<parseInt(msg.select.date_to)) {
+
+				tmp = [t,dpumps[msg.xid][i].v_l1,dpumps[msg.xid][i].v_p1,dpumps[msg.xid][i].l1,dpumps[msg.xid][i].p1];
 				out.push(tmp);
 
 				}
 
-//dpumps[msg.xid][i];	
-console.log(i,dpumps[msg.xid][i]);
 
-			}				
+				
+			}			
 			if (out.length) ws.send(JSON.stringify({id:msg.xid,df:msg.select.date_from,dt:msg.select.date_to,data:out}));	
 		break;
 	
@@ -65,17 +69,23 @@ function geth(tm) {
 	return xx.getTime()-xx.getMinutes()*60000;
 }
 
-oldtm = 0;
-function xparse(id,prs) {
+function getd(tm) {
+	xx = new Date(tm);
+	return xx.getTime()-xx.getMinutes()*60000-xx.getHours()*3600000;
+}
 
+
+oldtm = 0;
+
+function xparse(id,prs) {
 //	if (!xfirst) {xfirst = true; return;}	
-//console.log(">>>>>>>>>>",prs)
     len = prs.length;
+   if (len!=48 && len!=50) return;
     tm = parseInt(prs.substring(12,14)+prs.substring(10,12)+prs.substring(8,10)+prs.substring(6,8),16);
     xtm = new Date(tm*1000); tm = xtm.getTime();
-
-  if (tm<1500000000000 || tm>2000000000000) return;
     if (tm<starts[id]) return;
+//console.log(">>>>>>>>>>",id,len,tm)
+
     
 //    if (oldtm && oldtm<tm) { console.log("FUCK",id,tm-oldtm);}
 
@@ -85,6 +95,7 @@ function xparse(id,prs) {
     l1 = parseInt(prs.substring(len-16,len-18)+""+prs.substring(len-18,len-20)+""+prs.substring(len-20,len-22)+""+prs.substring(len-22,len-24),16);
     p1 = parseInt(prs.substring(len-24,len-26)+""+prs.substring(len-26,len-28)+""+prs.substring(len-28,len-30)+""+prs.substring(len-30,len-32),16);
 //    return {tm,l1,p1}; // Время, вода, электричество
+  if (tm<1580000000000 || tm>1900000000000) {console.log("FUCK",len,tm,l1,p1);return;}
 
 
     if (ltime == 0) {
@@ -106,7 +117,8 @@ function xparse(id,prs) {
 	if (xhr!=hr) {
 		v_l1 = v_l1-l1;v_p1 = v_p1-p1;
 		if (v_l1>0 || v_p1>0) {
-		dpump[geth(ltime)] = {v_l1,v_p1,l1,p1};
+		t = geth(ltime);
+		dpump[t] = {t,v_l1,v_p1,l1,p1};
 //		dpump.push([geth(ltime),v_l1,v_p1);
 //		console.log(">>",geth(ltime),v_l1,v_p1,l1,p1);
 		count++;
@@ -118,7 +130,7 @@ function xparse(id,prs) {
 		
 		
 
-
+	dd = xdd;
 	}
 
 	ltime = tm;
@@ -126,9 +138,14 @@ function xparse(id,prs) {
 
 var dpumps = Array();
 xfirst = false;
+
+
 function save_data(id) {
 xfirst = false;
 oldtm = 0;
+//arr = Object.keys(dpump).map(key => dpump[key]);
+//ok = arr.sort((itemA, itemB) =>  itemA - itemB);
+//console.log(ok);
     dpumps[id] = dpump; 
     dpump={};
 //console.log(dpump);
@@ -140,7 +157,8 @@ starts = {
 	1:1586951000000,
 //	2:1586951000000,
 	2:1593800962000,
-	3:1586951000000,
+	3:1593800000000,
+//	  1593799200000
 	5:1586951000000,
 	10:1586951000000,
 	12:1593820800000

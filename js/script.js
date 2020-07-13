@@ -56,7 +56,7 @@ xxws.onmessage = function(e) {
     json = e.data;
     
     newData(JSON.parse(json));
- //   console.log(json);
+//    console.log(json);
     }
      catch(err) {console.log(err);}
 }
@@ -80,7 +80,7 @@ function newData(data) {
 //xdat = JSON.parse(data);
 //console.log(data);
 id = data.id;
-console.log(">>>>>",id);
+console.log("::>>>>>",id);
 //    wellData.wells[xid].totalWater = ((xx.l1+base[xid][0])/10).toFixed(2);
 //    wellData.wells[xid].totalEnergy = ((xx.p1+base[xid][1])/600).toFixed(2);
 //    wellData.wells[xid].totalEfficiency =[(xx.p1/xx.l1).toFixed(2),1];
@@ -99,6 +99,8 @@ console.log(">>>>>",id);
     wellData.wells[id].totalEnergy = 0;
     wellData.wells[id].totalEfficiency = 0;
 
+        redrawGraphs();
+
     times = Array(); n1=Array(); n2 = Array(); n3 = Array(); n4 = Array(); n5 = Array(); nr = Array();
 j = 0;
 
@@ -107,7 +109,9 @@ var start = parseInt(data.dt);
 
 //JSON.stringify(data);
 h = parseInt((start-end)/3600000);
-console.log("---------------- ",data.df,data.dt,h);
+
+//console.log("::::::::::::::::::::",h);
+//console.log("---------------- ",data.df,data.dt,h);
 
 
 ww = 0;
@@ -124,24 +128,29 @@ dek = 0;
 
     flagd = false;
     flagw = false;
+ 
+	dday = new Date();
+	dxxx = dday.getTime()-dday.getHours()*3600000-dday.getMinutes()*60000+7*3600000;
+	wxxx = dday.getTime()-dday.getHours()*3600000-dday.getMinutes()*60000-5*3600000-86400000*7;
+    for (i in data.data) {  
 
-    for (i in data.data) {   
+
 	times[i] = parseInt(data.data[i][0]);  
 	n1[j] = (parseInt(data.data[i][1])/10).toFixed(2);
 	n2[j] = (parseInt(data.data[i][2])/600).toFixed(2);
 	n4[j] = (parseInt(data.data[i][3])/10).toFixed(2);
 	n5[j] = (parseInt(data.data[i][4])/600).toFixed(2);
 
-	if (n1[j]) n3[j] = (n2[j]/n1[j]).toFixed(2);	
+	if (n1[j]) n3[j] = (n2[j]/n1[j]).toFixed(2); else n3[j]=0;
 
-       else n3[j]=0;
 
-	if ((times[0]-times[i])<86400000) {
+//	if (times[i]>dxxx && (times[0]-times[i])<86400000) {
+	if (times[i]>(dxxx-86400000) && times[i]<dxxx) {
 
 	dwwk = parseInt((n1[j]));
 	deek = parseInt((n2[j]));
 
-	console.log(":::",times[j],id,dwwk,deek);
+//	console.log(":::",times[j],id,dwwk,deek);
 
 	if (dwwk) dwk+=dwwk;
 	if (deek) dek+=deek;
@@ -163,7 +172,7 @@ dek = 0;
 
 }
 
-	if (i && (times[0]-times[i])<86400000*7) {
+	if (i && times[i]>wxxx && (times[0]-times[i])<86400000*7) {
 		
 			
 	wwk = parseInt((n4[j-1]-n4[j]));
@@ -202,8 +211,9 @@ dek = 0;
 	
 	if (dwk) ef = (dek/dwk).toFixed(2);
 	else ef=0;  //by zlodey
+	if (isNaN(ef)) ef=0;
 
-	 console.log(">>--- ",id,dwk,dek);
+//	 console.log(">>--- ",id,dwk,dek);
 	 wellData.wells[id].day = {water:dwk,energy:dek,efficiency:ef};
 
 
@@ -249,6 +259,7 @@ dek = 0;
  //wellData.wells[id].day = {water:ww,energy:ee,efficiency:ef};
  //wellData.wells[id].week = {water:ww,energy:ee,efficiency:ef};
 
+
 console.log(id,times,n1);
     drawTables();
     drawInfo();
@@ -271,21 +282,13 @@ function getNum(prs) { // Распаковывает значения из по�
     return {tm,l1,p1}; // Время, вода, электричество
 }
 
+function clearTable() {
 
-function getData(data) {  // Обрабатывает ответы от сервера.
-    if (!data.status) return;
-    switch(data.cmd) {
-    case 'auth_resp':	
-    console.log("Token: ",data.token);
-    getRest();
-    break;
-    case 'get_data_resp':
-    xout = JSON.stringify(data);
-    xid = getId(data.devEui);
-
-    wellData.wells[xid].chartWaterI = Array();
+ for (xid in pumps) {
+   wellData.wells[xid].chartWaterI = Array();
     wellData.wells[xid].chartEnergyI = Array();
     wellData.wells[xid].chartEfficiencyI = Array();
+
     wellData.wells[xid].chartEngineI = Array();
 
     wellData.wells[xid].chartWaterC = Array();
@@ -296,7 +299,26 @@ function getData(data) {  // Обрабатывает ответы от серв
     wellData.wells[xid].totalWater = 0;
     wellData.wells[xid].totalEnergy = 0;
     wellData.wells[xid].totalEfficiency = 0;
+}
 
+}
+
+
+function getData(data) {  // Обрабатывает ответы от сервера.
+    if (!data.status) return;
+    switch(data.cmd) {
+    case 'auth_resp':	
+    console.log("Token: ",data.token);
+    getRest();
+    break;
+    case 'get_data_resp':
+
+	console.log("RESP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	clearTable();
+        redrawGraphs();
+
+    xout = JSON.stringify(data);
+    xid = getId(data.devEui);
 
    if (data.data_list.length==0) {
         console.log('NOTHING',chartRequest);
@@ -386,7 +408,7 @@ ii++;
    }
 
 */
-    console.log("$$$",times,n1,n2,n3);
+//    console.log("$$$",times,n1,n2,n3);
 //	console.log(times,n1);
 
 
@@ -442,12 +464,12 @@ function getIt(id,datef=0,datet=0,limit=0) {
     tmp.cmd = "get_data_req";
     tmp.xid = id;
     tmp.select = new Object();
-    console.log(":::",datef,datet);
+//    console.log(":::",datef,datet);
 if (datef) {
     tmp.select.date_from=datef;
     if (!datet) {datet=datef;}//+86400*1000;} //;datef = datef-86400*1000;}
     tmp.select.date_to=datet;
-    if (!limit) limit=15000;
+    if (!limit) limit=15000000;
 } else {
     ttm = new Date();
     xttm = ttm.getTime(); //-(ttm.getHours()-8)*60*60*1000-ttm.getMinutes()*60*1000+60*60*2*1000;
@@ -455,7 +477,7 @@ if (datef) {
     tmp.select.date_to=xttm;
     
  //  tmp.select.limit = limit;
-     limit=10000;
+     limit=1000000;
 }
 
 // if(intr>86400000*3) limit=5000; else limit=100;
@@ -465,7 +487,7 @@ if (datef) {
 //    console.log(JSON.stringify(tmp));	
 //    xws.send(JSON.stringify(tmp));
     xxws.send(JSON.stringify(tmp));
-
+    clearTable();
 }
  
 
@@ -959,7 +981,7 @@ if (datef) {
         let infoWell = $('.well.is-info').attr('data-id');
 
 wellData.chartDates.chartInfoDates = top.xtimes[infoWell];
-console.log(">>",infoWell,top.xtimes);
+//console.log(">>",infoWell,top.xtimes);
 
         infoChartWater.data.labels = infoChartEnergy.data.labels = infoChartCompare.data.labels = infoChartEngine.data.labels = wellData.chartDates.chartInfoDates;
 
@@ -1103,7 +1125,11 @@ $('#table-summary tbody >tr').remove();
 //    console.log(":::::::::::::::",chartRequest,chartRequest[1]);
     getIt(1,chartRequest[1],chartRequest[2],5000);
 	getIt(2,chartRequest[1],chartRequest[2],5000);
+	getIt(3,chartRequest[1],chartRequest[2],5000);
 	getIt(5,chartRequest[1],chartRequest[2],5000);
+	getIt(10,chartRequest[1],chartRequest[2],5000);
+	getIt(12,chartRequest[1],chartRequest[2],5000);
+
 //    drawInfo();
 //    drawGraphs();
 //    redrawGraphs();
