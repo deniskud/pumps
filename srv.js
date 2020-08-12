@@ -218,6 +218,7 @@ if (datef) {
     });
 
 function refresh () {
+dpumps = Array();
 	for (i in pumps) getIt(i);
 
 }
