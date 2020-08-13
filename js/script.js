@@ -446,7 +446,7 @@ ii++;
     break;    
     }
 
-};
+}
 
 function getRest() {for (i in pumps) {
 
@@ -1119,34 +1119,34 @@ wellData.chartDates.chartInfoDates = top.xtimes[infoWell];
             $('.table').find('tbody tr td').removeClass('highlighted');
         });
 
-        // ----- day table add class for sorting
-        $('#table-day th').click(function () {
-            if($(this).hasClass('asc')) {
-                $(this).removeClass('asc').addClass('desc');
-            }
-            else if($(this).hasClass('desc')) {
-                $(this).removeClass('desc').addClass('asc');
-            }
-            else {
-                $('#table-day th').removeClass('asc desc');
-                $(this).addClass('asc');
-            }
-        });
-
-        // ----- day table sorting
-        var getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-        var comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-                v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-        )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-        document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
-            var table = $(th).closest('table').find('tbody')[0];
-            Array.from(table.querySelectorAll('tr:nth-child(n+1):not(.last)'))
-                .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-                .forEach(tr => table.appendChild(tr));
-            table.appendChild(table.querySelectorAll('tr.last')[0]);
-        })));
-
     }
+
+    // ----- day table add class for sorting
+    $('#table-day th').click(function () {
+        if($(this).hasClass('asc')) {
+            $(this).removeClass('asc').addClass('desc');
+        }
+        else if($(this).hasClass('desc')) {
+            $(this).removeClass('desc').addClass('asc');
+        }
+        else {
+            $('#table-day th').removeClass('asc desc');
+            $(this).addClass('asc');
+        }
+    });
+
+    // ----- day table sorting
+    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+            v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+    document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
+        const table = $(th).closest('table').find('tbody')[0];
+        Array.from(table.querySelectorAll('tr:nth-child(n+1):not(.last)'))
+            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+            .forEach(tr => table.appendChild(tr));
+        table.appendChild(table.querySelectorAll('tr.last')[0]);
+    })));
 
     function dataRequest() {
 
