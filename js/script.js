@@ -94,7 +94,7 @@ console.log("::>>>>>",id);
     wellData.wells[id].chartEnergyC = Array();
     wellData.wells[id].chartEfficiencyC = Array();
     wellData.wells[id].chartEngineC = Array();
-    top.xtimes[id] = Array();;
+    top.xtimes[id] = Array();
     wellData.wells[id].totalWater = 0;
     wellData.wells[id].totalEnergy = 0;
     wellData.wells[id].totalEfficiency = 0;
@@ -1071,49 +1071,80 @@ wellData.chartDates.chartInfoDates = top.xtimes[infoWell];
     // ----- this is requests from period selection
     function drawTables() {
 
-$('#table-day tbody > tr').remove();
-$('#table-summary tbody >tr').remove();
+        $('#table-day tbody > tr').remove();
+        $('#table-summary tbody >tr').remove();
 
-    for(let n in wellData.wells) {
-        if(wellData.wells[n] !== false) {
-            $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
-            $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
+        for(let n in wellData.wells) {
+            if(wellData.wells[n] !== false) {
+                $('#table-day').append('<tr><td>№ ' + (n < 10 ? 0 + n : n) + '</td><td>' + wellData.wells[n].day.water + '</td><td>' + wellData.wells[n].day.energy + '</td><td class="ef' + (wellData.wells[n].day.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].day.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].day.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].day.efficiency + '</td></tr>');
+                $('#table-summary').append('<tr><td>№ ' + n + '</td><td>' + wellData.wells[n].week.water + '</td><td>' + wellData.wells[n].week.energy + '</td><td class="ef' + (wellData.wells[n].week.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].week.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].week.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].week.efficiency + '</td><td>' + wellData.wells[n].month.water + '</td><td>' + wellData.wells[n].month.energy + '</td><td class="ef' + (wellData.wells[n].month.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].month.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].month.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].month.efficiency + '</td><td>' + wellData.wells[n].year.water + '</td><td>' + wellData.wells[n].year.energy + '</td><td class="ef' + (wellData.wells[n].year.efficiency <= 1 ? ' ef-high' : '') + (wellData.wells[n].year.efficiency > 1.4 ? ' ef-low' : '') + (wellData.wells[n].year.efficiency === 0 ? ' ef-no' : '') + '">' + wellData.wells[n].year.efficiency + '</td></tr>');
+            }
         }
-    }
 
-    $(".table").on('mouseenter', 'td', function(){
-        $(this).closest('.table').find('tbody tr td:nth-of-type(' + ($(this).index() + 1) + ')').addClass('highlighted');
-        $(this).siblings('td').addClass('highlighted');
-    }).on('mouseleave', 'td', function(){
-        $('.table').find('tbody tr td').removeClass('highlighted');
-    });
+        let td1, td2, td3, ts1, ts2, ts3, ts4, ts5, ts6, ts7, ts8, ts9;
+        td1 = td2 = td3 = ts1 = ts2 = ts3 = ts4 = ts5 = ts6 = ts7 = ts8 = ts9 = 0;
 
-    // ----- day table add class for sorting
-    $('#table-day th').click(function () {
-        if($(this).hasClass('asc')) {
-            $(this).removeClass('asc').addClass('desc');
-        }
-        else if($(this).hasClass('desc')) {
-            $(this).removeClass('desc').addClass('asc');
-        }
-        else {
-            $('#table-day th').removeClass('asc desc');
-            $(this).addClass('asc');
-        }
-    });
+        $('#table-day tbody tr').each(function () {
+            td1 += parseFloat($(this).find('td').eq(1).text());
+            td2 += parseFloat($(this).find('td').eq(2).text());
+            td3 += parseFloat($(this).find('td').eq(3).text());
+        });
 
-    // ----- day table sorting
-    const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
-    const comparer = (idx, asc) => (a, b) => ((v1, v2) =>
-            v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
-    )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
-    document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
-        const table = $(th).closest('table').find('tbody')[0];
-        Array.from(table.querySelectorAll('tr:nth-child(n+1)'))
-            .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
-            .forEach(tr => table.appendChild(tr));
-    })));
+        td3 = td3/$('#table-day tbody tr').length;
 
+        $('#table-day').append('<tr class="last"><td>Всього</td><td>' + td1.toFixed(2) + '</td><td>' + td2.toFixed(2) + '</td><td class="ef' + (td3 <= 1 ? ' ef-high' : '') + (td3 > 1.4 ? ' ef-low' : '') + (td3 === 0 ? ' ef-no' : '') + '">' + td3.toFixed(2) + '</td></tr>');
+
+        $('#table-summary tbody tr').each(function () {
+            ts1 += parseFloat($(this).find('td').eq(1).text());
+            ts2 += parseFloat($(this).find('td').eq(2).text());
+            ts3 += parseFloat($(this).find('td').eq(3).text());
+            ts4 += parseFloat($(this).find('td').eq(4).text());
+            ts5 += parseFloat($(this).find('td').eq(5).text());
+            ts6 += parseFloat($(this).find('td').eq(6).text());
+            ts7 += parseFloat($(this).find('td').eq(7).text());
+            ts8 += parseFloat($(this).find('td').eq(8).text());
+            ts9 += parseFloat($(this).find('td').eq(9).text());
+        });
+
+        ts3 = ts3/$('#table-summary tbody tr').length;
+        ts6 = ts6/$('#table-summary tbody tr').length;
+        ts9 = ts9/$('#table-summary tbody tr').length;
+
+        $('#table-summary').append('<tr class="last"><td>Всього</td><td>' + ts1.toFixed(2) + '</td><td>' + ts2.toFixed(2) + '</td><td class="ef' + (ts3 <= 1 ? ' ef-high' : '') + (ts3 > 1.4 ? ' ef-low' : '') + (ts3 === 0 ? ' ef-no' : '') + '">' + ts3.toFixed(2) + '</td><td>' + ts4.toFixed(2) + '</td><td>' + ts5.toFixed(2) + '</td><td class="ef' + (ts6 <= 1 ? ' ef-high' : '') + (ts6 > 1.4 ? ' ef-low' : '') + (ts6 === 0 ? ' ef-no' : '') + '">' + ts6.toFixed(2) + '</td><td>' + ts7.toFixed(2) + '</td><td>' + ts8.toFixed(2) + '</td><td class="ef' + (ts9 <= 1 ? ' ef-high' : '') + (ts9 > 1.4 ? ' ef-low' : '') + (ts9 === 0 ? ' ef-no' : '') + '">' + ts9.toFixed(2) + '</td></tr>');
+
+        $(".table").on('mouseenter', 'td', function(){
+            $(this).closest('.table').find('tbody tr td:nth-of-type(' + ($(this).index() + 1) + ')').addClass('highlighted');
+            $(this).siblings('td').addClass('highlighted');
+        }).on('mouseleave', 'td', function(){
+            $('.table').find('tbody tr td').removeClass('highlighted');
+        });
+
+        // ----- day table add class for sorting
+        $('#table-day th').click(function () {
+            if($(this).hasClass('asc')) {
+                $(this).removeClass('asc').addClass('desc');
+            }
+            else if($(this).hasClass('desc')) {
+                $(this).removeClass('desc').addClass('asc');
+            }
+            else {
+                $('#table-day th').removeClass('asc desc');
+                $(this).addClass('asc');
+            }
+        });
+
+        // ----- day table sorting
+        var getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
+        var comparer = (idx, asc) => (a, b) => ((v1, v2) =>
+                v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
+        )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+        document.querySelectorAll('#table-day th').forEach(th => th.addEventListener('click', (() => {
+            var table = $(th).closest('table').find('tbody')[0];
+            Array.from(table.querySelectorAll('tr:nth-child(n+1):not(.last)'))
+                .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+                .forEach(tr => table.appendChild(tr));
+            table.appendChild(table.querySelectorAll('tr.last')[0]);
+        })));
 
     }
 
