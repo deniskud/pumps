@@ -1188,11 +1188,11 @@ sub {
         left: -330px;
         transition: 0.3s;
         z-index: 7;
-        box-shadow: 260px 0 0 0 rgba(0, 0, 0, 0), 520px 0 0 0 rgba(0, 0, 0, 0), 780px 0 0 0 rgba(0, 0, 0, 0), 1040px 0 0 0 rgba(0, 0, 0, 0), 1300px 0 0 0 rgba(0, 0, 0, 0);
+        box-shadow: 260px 0 0 0 rgba(0, 0, 0, 0), 520px 0 0 0 rgba(0, 0, 0, 0), 780px 0 0 0 rgba(0, 0, 0, 0), 1040px 0 0 0 rgba(0, 0, 0, 0), 1300px 0 0 0 rgba(0, 0, 0, 0), 1560px 0 0 0 rgba(0, 0, 0, 0), 1820px 0 0 0 rgba(0, 0, 0, 0), 2080px 0 0 0 rgba(0, 0, 0, 0), 2340px 0 0 0 rgba(0, 0, 0, 0), 2600px 0 0 0 rgba(0, 0, 0, 0), 2860px 0 0 0 rgba(0, 0, 0, 0), 3120px 0 0 0 rgba(0, 0, 0, 0), 3380px 0 0 0 rgba(0, 0, 0, 0), 3640px 0 0 0 rgba(0, 0, 0, 0);
     }
     .sidebar.active {
         left: 0;
-        box-shadow: 260px 0 0 0 rgba(0, 0, 0, 0.8), 520px 0 0 0 rgba(0, 0, 0, 0.8), 780px 0 0 0 rgba(0, 0, 0, 0.8), 1040px 0 0 0 rgba(0, 0, 0, 0.8), 1300px 0 0 0 rgba(0, 0, 0, 0.8);
+        box-shadow: 260px 0 0 0 rgba(0, 0, 0, 0.8), 520px 0 0 0 rgba(0, 0, 0, 0.8), 780px 0 0 0 rgba(0, 0, 0, 0.8), 1040px 0 0 0 rgba(0, 0, 0, 0.8), 1300px 0 0 0 rgba(0, 0, 0, 0.8), 1560px 0 0 0 rgba(0, 0, 0, 0.8), 1820px 0 0 0 rgba(0, 0, 0, 0.8), 2080px 0 0 0 rgba(0, 0, 0, 0.8), 2340px 0 0 0 rgba(0, 0, 0, 0.8), 2600px 0 0 0 rgba(0, 0, 0, 0.8), 2860px 0 0 0 rgba(0, 0, 0, 0.8), 3120px 0 0 0 rgba(0, 0, 0, 0.8), 3380px 0 0 0 rgba(0, 0, 0, 0.8), 3640px 0 0 0 rgba(0, 0, 0, 0.8);
     }
     .sidebar-close {
         display: block;
